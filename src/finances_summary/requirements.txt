@@ -1,4 +1,4 @@
-black
+yapf
 pymongo
 starlette
 uvicorn

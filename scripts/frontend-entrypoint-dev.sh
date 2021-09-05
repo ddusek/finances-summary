@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd app/
+cd frontend/
 
 echo "Run dev"
 npm run dev

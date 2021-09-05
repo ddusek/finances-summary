@@ -1,26 +1,26 @@
 version: '3.8'
 
 services:
-#   mongo:
-#     image: mongo:latest
-#     container_name: fs-mongo
-#     restart: always
-#     environment:
-#       MONGO_INITDB_ROOT_USERNAME: fs-admin
-#       MONGO_INITDB_ROOT_PASSWORD: 123456
-#       MONGO_INITDB_DATABASE: finances-summary
-#     ports:
-#       - 27017:27017
-#     networks:
-#       - fs
-#     volumes:
-#       - ./scripts/mongo-entrypoint-dev.js:/docker-entrypoint-initdb.d/mongo-entrypoint-dev.js:ro
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: fs-mongo
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: fs-admin
+  #     MONGO_INITDB_ROOT_PASSWORD: 123456
+  #     MONGO_INITDB_DATABASE: finances_summary
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - fs
+  #   volumes:
+  #     - ./scripts/mongo-entrypoint-dev.js:/docker-entrypoint-initdb.d/mongo-entrypoint-dev.js:ro
 
   starlette:
     container_name: fs-starlette
     build:
       context: ./
-      dockerfile: src/finances_summary/Dockerfile
+      dockerfile: ./Starlette.Dockerfile
     ports:
       - 8000:8000
     networks:
@@ -34,7 +34,7 @@ services:
 #     container_name: fs-frontend
 #     build:
 #       context: ./
-#       dockerfile: src/frontend/Dockerfile
+#       dockerfile: Frontend.Dockerfile
 #     ports: 
 #       - 8080:8080
 #     networks:

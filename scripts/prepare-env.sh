@@ -35,3 +35,4 @@ fi
 # generate type stubs for Pyright
 printf "\n${GREEN}Generating Type Stubs...${NORMAL}\n"
 pyright --createstub pymongo
+pyright --createstub uvicorn

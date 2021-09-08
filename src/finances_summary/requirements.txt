@@ -1,5 +1,10 @@
 yapf
+pylint
+pylama
+
 pymongo
 starlette
 uvicorn
 itsdangerous
+pyjwt
+argon2-cffi

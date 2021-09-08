@@ -36,3 +36,7 @@ fi
 printf "\n${GREEN}Generating Type Stubs...${NORMAL}\n"
 pyright --createstub pymongo
 pyright --createstub uvicorn
+
+# generate dir for logging
+printf "\n${GREEN}Generating folder for logging...${NORMAL}\n"
+mkdir ../src/finances_summary/logs

@@ -1,11 +1,12 @@
+import base64
+import binascii
 from starlette.authentication import (AuthenticationBackend, AuthenticationError,
                                       SimpleUser, UnauthenticatedUser, AuthCredentials,
                                       requires)
-from starlette.middleware import Middleware, AuthenticationMiddleware
+from starlette.middleware import Middleware
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-import base64
-import binascii
 from finances_summary import settings
 
 

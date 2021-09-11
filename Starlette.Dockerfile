@@ -9,14 +9,8 @@ ENV PYTHONDONTWRITEBYTECODE=TRUE
 RUN mkdir /finances_summary
 
 COPY scripts/starlette-entrypoint-dev.sh /scripts/starlette-entrypoint-dev.sh
-COPY src/finances_summary/user /finances_summary/user
-COPY src/finances_summary/certs /
-COPY src/finances_summary/__init__.py /finances_summary/__init__.py
-COPY src/finances_summary/settings.py /finances_summary/settings.py
-COPY src/finances_summary/app.py /finances_summary/app.py
+COPY src/finances_summary/ /finances_summary/
 COPY /.env /.env
-COPY src/finances_summary/requirements.txt /finances_summary/requirements.txt
-
 ENV PYTHONPATH=./
 
 RUN pip install --upgrade pip && \

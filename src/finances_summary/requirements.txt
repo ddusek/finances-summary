@@ -3,6 +3,7 @@ pylint
 pylama
 
 pymongo
+mongoengine
 starlette
 uvicorn
 itsdangerous

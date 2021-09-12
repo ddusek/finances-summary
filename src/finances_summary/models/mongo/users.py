@@ -2,7 +2,7 @@ from datetime import datetime
 from mongoengine import Document, StringField, EmailField, DateTimeField
 
 
-class User(Document):
+class Users(Document):
     """User model.
     """
     current_time = datetime.now()

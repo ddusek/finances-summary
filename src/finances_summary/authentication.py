@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from jwt import encode
 from argon2 import PasswordHasher
@@ -7,10 +8,12 @@ from argon2.exceptions import (
     VerifyMismatchError,
     InvalidHash,
 )
+from bson import json_util
+from mongoengine import connect
 from starlette.responses import JSONResponse, Response
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT, HTTP_200_OK
 from finances_summary.models.authentication import JwtUserModel
-from finances_summary.models.mongo.user import User
+from finances_summary.models.mongo.users import Users
 from finances_summary.settings import LOGGER, TOKEN_ALGORITHM, TOKEN_SECRET_KEY
 
 # def authorized(func: callable):
@@ -28,7 +31,7 @@ def _is_email(login: str) -> bool:
     return "@" in login
 
 
-def _rehash_password(user: User, password: str) -> None:
+def _rehash_password(user: Users, password: str) -> None:
     """hash password again if Argon2 parameters change.
     """
     try:
@@ -45,17 +48,17 @@ def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) 
     """Generate JWT token.
     """
     expire = datetime.now() + expiration
-    data.update({"exp": expire})
-    encoded_jwt = encode(data, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM)
+    data.expiration = expire
+    encoded_jwt = encode(json.dumps(data, default=json_util.default), TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM)
     return encoded_jwt
 
 
-def _find_user(login) -> User:
+def _find_user(login) -> Users:
     """Find user either by email or username.
     """
     if _is_email(login):
-        return User.objects(email=login).first()
-    return User.objects(username=login).first()
+        return Users.objects(email=login).first()
+    return Users.objects(username=login).first()
 
 
 def register(username: str, password: str, email: str) -> Response:
@@ -69,10 +72,11 @@ def register(username: str, password: str, email: str) -> Response:
         raise ValueError("cannot register user, didnt get email")
 
     if _find_user(email) is not None:
+        print(_find_user(email))
         return Response(status_code=HTTP_409_CONFLICT)
     try:
         pwd_hasher = PasswordHasher()
-        user = User().create_new(username, email, pwd_hasher.hash(password))
+        user = Users().create_new(username, email, pwd_hasher.hash(password))
         user.save()
         token = _generate_token(JwtUserModel(username))
         return JSONResponse({'token': token, 'id': user.pk, 'username': username})

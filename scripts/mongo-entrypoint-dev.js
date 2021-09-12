@@ -1,6 +1,6 @@
 // Create Collections.
 db.createCollection("users")
-db.createCollection("transactions")
+db.createCollection("userTransactions")
 db.createCollection("stocks")
 db.createCollection("news")
 

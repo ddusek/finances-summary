@@ -1,6 +1,8 @@
 from starlette.responses import Response
 from starlette.requests import Request
+from mongoengine import connect
 from finances_summary.authentication import register, login, logout
+from finances_summary.settings import _mongo_conn_uri
 
 
 async def register_user(request: Request) -> Response:

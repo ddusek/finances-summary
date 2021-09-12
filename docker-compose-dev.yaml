@@ -1,20 +1,20 @@
 version: '3.8'
 
 services:
-  # mongo:
-  #   image: mongo:latest
-  #   container_name: fs-mongo
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: fs-admin
-  #     MONGO_INITDB_ROOT_PASSWORD: 123456
-  #     MONGO_INITDB_DATABASE: finances_summary
-  #   ports:
-  #     - 27017:27017
-  #   networks:
-  #     - fs
-  #   volumes:
-  #     - ./scripts/mongo-entrypoint-dev.js:/docker-entrypoint-initdb.d/mongo-entrypoint-dev.js:ro
+  mongo:
+    image: mongo:latest
+    container_name: fs-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: fs-admin
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: finances_summary
+    ports:
+      - 27017:27017
+    networks:
+      - fs
+    volumes:
+      - ./scripts/mongo-entrypoint-dev.js:/docker-entrypoint-initdb.d/mongo-entrypoint-dev.js:ro
 
   starlette:
     container_name: fs-starlette
@@ -27,8 +27,8 @@ services:
       - fs
     volumes:
       - ./src/finances-summary:/finances-summary/
-    # depends_on:
-    #   - mongo
+    depends_on:
+      - mongo
 
 #   frontend:
 #     container_name: fs-frontend

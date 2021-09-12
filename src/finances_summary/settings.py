@@ -18,10 +18,11 @@ MONGO_DATABASE = config('MONGO_DATABASE')
 MONGO_USERNAME = config('MONGO_USERNAME', cast=Secret)
 MONGO_PASSWORD = config('MONGO_PASSWORD', cast=Secret)
 
-_mongo_conn_uri = 'mongodb://%s:%s@%s' % (
+_mongo_conn_uri = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
     urllib.parse.quote_plus(str(MONGO_USERNAME)),
     urllib.parse.quote_plus(str(MONGO_PASSWORD)),
     MONGO_HOSTNAME,
+    MONGO_DATABASE
 )
 # MongoClient connection.
 MONGO: MongoClient = MongoClient(_mongo_conn_uri,

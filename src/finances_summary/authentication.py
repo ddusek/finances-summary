@@ -6,15 +6,17 @@ from argon2.exceptions import (
     HashingError,
     VerificationError,
     VerifyMismatchError,
-    InvalidHash,
-)
-from bson import json_util
+    InvalidHash)
 from mongoengine import connect
 from starlette.responses import JSONResponse, Response
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT, HTTP_200_OK
 from finances_summary.models.authentication import JwtUserModel
 from finances_summary.models.mongo.users import Users
-from finances_summary.settings import LOGGER, TOKEN_ALGORITHM, TOKEN_SECRET_KEY
+from finances_summary.settings import (
+    LOGGER,
+    JWT_ALGORITHM,
+    JWT_PRIVATE_KEY_PATH,
+    JWT_PUBLIC_KEY_PATH)
 
 # def authorized(func: callable):
 #     def decorator(*args, **kwargs):
@@ -48,9 +50,12 @@ def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) 
     """Generate JWT token.
     """
     expire = datetime.now() + expiration
-    data.expiration = expire
-    encoded_jwt = encode(json.dumps(data, default=json_util.default), TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM)
-    return encoded_jwt
+    data.expiration = expire.isoformat()
+    with open(JWT_PRIVATE_KEY_PATH, 'r', encoding='UTF-8') as file:
+        encoded_jwt = encode(data.__dict__,
+                             key=file.read(),
+                             algorithm=JWT_ALGORITHM)
+        return encoded_jwt
 
 
 def _find_user(login) -> Users:
@@ -79,7 +84,7 @@ def register(username: str, password: str, email: str) -> Response:
         user = Users().create_new(username, email, pwd_hasher.hash(password))
         user.save()
         token = _generate_token(JwtUserModel(username))
-        return JSONResponse({'token': token, 'id': user.pk, 'username': username})
+        return JSONResponse({'token': token, 'id': str(user.pk), 'username': username})
     except HashingError as err:
         LOGGER.exception(err)
         return Response(status_code=HTTP_401_UNAUTHORIZED)

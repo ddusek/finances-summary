@@ -6,4 +6,4 @@ class JwtUserModel:
     """
     def __init__(self, username: str):
         self.username: str = username
-        self.expiration: datetime
+        self.expiration: str

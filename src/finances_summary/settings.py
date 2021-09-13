@@ -39,9 +39,10 @@ STARLETTE_RELOAD = config('STARLETTE_RELOAD', cast=bool)
 STARLETTE_SSL_KEYFILE = config('STARLETTE_SSL_KEYFILE')
 STARLETTE_SSL_CERTFILE = config('STARLETTE_SSL_CERTFILE')
 
-# Security.
-TOKEN_ALGORITHM = "ES256K"
-TOKEN_SECRET_KEY = config('TOKEN_SECRET_KEY', cast=Secret)
+# JWT Token.
+JWT_ALGORITHM = "ES256K"
+JWT_PRIVATE_KEY_PATH = f'{ROOT_DIR}/secrets/private-jwt.pem'
+JWT_PUBLIC_KEY_PATH = f'{ROOT_DIR}/secrets/public-jwt.pem'
 
 # Logging.
 logging.basicConfig(

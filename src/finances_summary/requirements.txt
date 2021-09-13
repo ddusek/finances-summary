@@ -2,6 +2,7 @@ yapf
 pylint
 pylama
 
+cryptography
 pymongo
 mongoengine
 starlette

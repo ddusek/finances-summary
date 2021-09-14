@@ -1,5 +1,5 @@
 from starlette.routing import Route, Mount
-from finances_summary.endpoints import register_user, login_user, logout_user
+from finances_summary.api.endpoints import register_user, login_user, logout_user
 
 
 def _user_routes() -> [Route]:

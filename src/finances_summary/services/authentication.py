@@ -2,21 +2,16 @@ import json
 from datetime import datetime, timedelta
 from jwt import encode
 from argon2 import PasswordHasher
-from argon2.exceptions import (
-    HashingError,
-    VerificationError,
-    VerifyMismatchError,
-    InvalidHash)
+from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchError,
+                               InvalidHash)
 from mongoengine import connect
 from starlette.responses import JSONResponse, Response
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT, HTTP_200_OK
 from finances_summary.models.authentication import JwtUserModel
 from finances_summary.models.mongo.users import Users
-from finances_summary.settings import (
-    LOGGER,
-    JWT_ALGORITHM,
-    JWT_PRIVATE_KEY_PATH,
-    JWT_PUBLIC_KEY_PATH)
+from finances_summary.logger import LOGGER
+from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
+                                       JWT_PUBLIC_KEY_PATH)
 
 # def authorized(func: callable):
 #     def decorator(*args, **kwargs):
@@ -52,9 +47,7 @@ def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) 
     expire = datetime.now() + expiration
     data.expiration = expire.isoformat()
     with open(JWT_PRIVATE_KEY_PATH, 'r', encoding='UTF-8') as file:
-        encoded_jwt = encode(data.__dict__,
-                             key=file.read(),
-                             algorithm=JWT_ALGORITHM)
+        encoded_jwt = encode(data.__dict__, key=file.read(), algorithm=JWT_ALGORITHM)
         return encoded_jwt
 
 
@@ -104,7 +97,7 @@ def login(login: str, password: str) -> Response:
                 _rehash_password(user, password)
 
             return JSONResponse({
-                'id': user.pk,
+                'id': str(user.pk),
                 'token': _generate_token(JwtUserModel(login)),
                 'username': user.username,
             })
@@ -119,10 +112,10 @@ def login(login: str, password: str) -> Response:
 
 
 def logout(token: str, username: str) -> Response:
-    """Logout user with deleting his login token from the database.
+    """Logout user.
     """
 
-    #  TODO remove token from cookie
+    #  TODO remove token from cookie, endpoint might not be needed.
     token = ''
 
     return Response(status_code=HTTP_200_OK)

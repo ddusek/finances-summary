@@ -3,7 +3,6 @@ import logging
 import urllib.parse
 from datetime import date
 from pymongo import MongoClient
-from mongoengine import connect
 from starlette.config import Config
 from starlette.datastructures import Secret, CommaSeparatedStrings
 
@@ -18,17 +17,16 @@ MONGO_DATABASE = config('MONGO_DATABASE')
 MONGO_USERNAME = config('MONGO_USERNAME', cast=Secret)
 MONGO_PASSWORD = config('MONGO_PASSWORD', cast=Secret)
 
-_mongo_conn_uri = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
+MONGO_CONN_URI = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
     urllib.parse.quote_plus(str(MONGO_USERNAME)),
     urllib.parse.quote_plus(str(MONGO_PASSWORD)),
     MONGO_HOSTNAME,
     MONGO_DATABASE
 )
 # MongoClient connection.
-MONGO: MongoClient = MongoClient(_mongo_conn_uri,
-                                 serverSelectionTimeoutMS=3000)[MONGO_DATABASE]
-# MongoEngine connection.
-connect(host=_mongo_conn_uri)
+# MONGO: MongoClient = MongoClient(_mongo_conn_uri,
+#                                  serverSelectionTimeoutMS=3000)[MONGO_DATABASE]
+
 
 # Starlette.
 ALLOWED_ORIGINS: list[str] = config('ALLOWED_ORIGINS', cast=CommaSeparatedStrings)
@@ -43,12 +41,3 @@ STARLETTE_SSL_CERTFILE = config('STARLETTE_SSL_CERTFILE')
 JWT_ALGORITHM = "ES256K"
 JWT_PRIVATE_KEY_PATH = f'{ROOT_DIR}/secrets/private-jwt.pem'
 JWT_PUBLIC_KEY_PATH = f'{ROOT_DIR}/secrets/public-jwt.pem'
-
-# Logging.
-logging.basicConfig(
-    filename=f"{ROOT_DIR}/logs/{date.today().isoformat()}.log",
-    filemode="a+",
-    encoding="utf-8",
-    level=logging.WARNING,
-)
-LOGGER = logging.getLogger(__name__)

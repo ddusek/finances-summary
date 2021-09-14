@@ -1,8 +1,10 @@
 import uvicorn
+from mongoengine import connect
 from starlette.applications import Starlette
 from finances_summary import settings
-from finances_summary.middlewares import get_middlewares
-from finances_summary.routes import all_routes
+from finances_summary.api.middlewares import get_middlewares
+from finances_summary.api.routes import all_routes
+from finances_summary.settings import MONGO_CONN_URI
 
 # Create middlewares.
 middlewares = get_middlewares()
@@ -10,8 +12,12 @@ middlewares = get_middlewares()
 # Create routes.
 routes = all_routes()
 
+# Connect MongoEngine.
+connect(host=MONGO_CONN_URI)
+
 # Start api.
 app = Starlette(debug=True, middleware=middlewares, routes=routes)
+
 
 if __name__ == '__main__':
     uvicorn.run('app:app',

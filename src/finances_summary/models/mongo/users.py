@@ -6,7 +6,7 @@ class Users(Document):
     """User model.
     """
     current_time = datetime.now()
-    username = StringField(required=True)
+    username = StringField(regex="^\\w+$", required=True)
     email = EmailField(required=True)
     password = StringField(required=True)
     created = DateTimeField(default=current_time)

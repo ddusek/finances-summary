@@ -1,7 +1,9 @@
 yapf
 pylint
 pylama
+mypy
 
+pytest
 cryptography
 pymongo
 mongoengine

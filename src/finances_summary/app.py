@@ -1,3 +1,4 @@
+import sys
 import uvicorn
 from mongoengine import connect
 from starlette.applications import Starlette
@@ -5,6 +6,10 @@ from finances_summary import settings
 from finances_summary.api.middlewares import get_middlewares
 from finances_summary.api.routes import all_routes
 from finances_summary.settings import MONGO_CONN_URI
+from finances_summary.logger import except_handler
+
+# Logging unhandled exceptions.
+sys.excepthook = except_handler
 
 # Create middlewares.
 middlewares = get_middlewares()

@@ -29,7 +29,7 @@ class CustomAuthBackend(AuthenticationBackend):
         return AuthCredentials(["authenticated"]), SimpleUser(username)
 
 
-def get_middlewares() -> [Middleware]:
+def get_middlewares() -> list[Middleware]:
     """Get all middlewares.
     :return: List of middlewares.
     :rtype: [Middleware]

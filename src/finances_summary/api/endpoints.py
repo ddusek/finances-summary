@@ -23,6 +23,7 @@ async def logout_user(request: Request) -> Response:
     params = await request.json()
     return logout(params['token'], params['username'])
 
+
 async def add_transaction(request: Request) -> Response:
     """Add a new transaction.
     """

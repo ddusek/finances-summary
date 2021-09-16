@@ -4,9 +4,10 @@ from jwt import encode
 from argon2 import PasswordHasher
 from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchError,
                                InvalidHash)
-from mongoengine import connect
+from mongoengine import connect, ValidationError
 from starlette.responses import JSONResponse, Response
-from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT, HTTP_200_OK
+from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_422_UNPROCESSABLE_ENTITY,
+                              HTTP_409_CONFLICT, HTTP_200_OK)
 from finances_summary.models.authentication import JwtUserModel
 from finances_summary.models.mongo.users import Users
 from finances_summary.logger import LOGGER
@@ -41,7 +42,7 @@ def _rehash_password(user: Users, password: str) -> None:
         LOGGER.exception(err)
 
 
-def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) -> bytes:
+def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) -> str:
     """Generate JWT token.
     """
     expire = datetime.now() + expiration
@@ -62,12 +63,8 @@ def _find_user(login) -> Users:
 def register(username: str, password: str, email: str) -> Response:
     """Register a new user.
     """
-    if not username:
-        raise ValueError("cannot register user, didnt get username")
-    if not password:
-        raise ValueError("cannot register user, didnt get password")
-    if not email:
-        raise ValueError("cannot register user, didnt get email")
+    if not username or not password or not email:
+        return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
 
     if _find_user(email) is not None:
         print(_find_user(email))
@@ -75,12 +72,15 @@ def register(username: str, password: str, email: str) -> Response:
     try:
         pwd_hasher = PasswordHasher()
         user = Users().create_new(username, email, pwd_hasher.hash(password))
-        user.save()
+        try:
+            user.save()
+        except ValidationError:
+            return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
         token = _generate_token(JwtUserModel(username))
         return JSONResponse({'token': token, 'id': str(user.pk), 'username': username})
     except HashingError as err:
         LOGGER.exception(err)
-        return Response(status_code=HTTP_401_UNAUTHORIZED)
+        return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 def login(login: str, password: str) -> Response:

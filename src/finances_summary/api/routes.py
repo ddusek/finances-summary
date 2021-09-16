@@ -2,7 +2,7 @@ from starlette.routing import Route, Mount
 from finances_summary.api.endpoints import register_user, login_user, logout_user
 
 
-def _user_routes() -> [Route]:
+def _user_routes() -> list[Route]:
     """Routes for user.
     """
     return [
@@ -12,13 +12,13 @@ def _user_routes() -> [Route]:
     ]
 
 
-def _stock_routes() -> [Route]:
+def _stock_routes() -> list[Route]:
     """Routes for stocks.
     """
     return []
 
 
-def all_routes() -> [Mount]:
+def all_routes() -> list[Mount]:
     """Get all routes for api.
     """
     return [Mount('/api/user', routes=_user_routes()),

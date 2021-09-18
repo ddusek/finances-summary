@@ -1,7 +1,7 @@
 from starlette.routing import Route, Mount
-from finances_summary.api.endpoints import (register_user, login_user, logout_user,
-                                            add_transaction, list_transactions,
-                                            remove_transaction)
+from finances_summary.api.endpoints import (
+    register_user, login_user, logout_user, add_transaction, list_transactions,
+    remove_transaction, user_summary_total, user_summary_symbol)
 
 
 def _user_routes() -> list[Route]:
@@ -21,6 +21,12 @@ def _transaction_routes() -> list[Route]:
         Route('/add', add_transaction, methods=['POST']),
         Route('/remove', remove_transaction, methods=['DELETE']),
         Route('/list', list_transactions, methods=['GET']),
+        Mount(  # type: ignore
+            '/summary',
+            routes=[
+                Route('/total', user_summary_total, methods=['POST']),
+                Route('/symbol/{symbol:str}', user_summary_symbol, methods=['POST'])
+            ]),
     ]
 
 

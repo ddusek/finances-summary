@@ -2,6 +2,7 @@ from starlette.responses import Response
 from starlette.requests import Request
 from finances_summary.services.authentication import register, login, logout
 from finances_summary.services.transaction import add, remove, list_
+from finances_summary.services.user_summary import total, symbol
 
 
 async def register_user(request: Request) -> Response:
@@ -46,3 +47,15 @@ async def list_transactions(request: Request) -> Response:
     type_ = request.query_params['type']
     symbol = request.query_params['symbol']
     return list_(type_, symbol)
+
+
+async def user_summary_total(request: Request) -> Response:
+    """Summary of user's finances.
+    """
+    return total()
+
+
+async def user_summary_symbol(request: Request) -> Response:
+    """Summary of user's specific stock.
+    """
+    return symbol(request.path_params['symbol'])

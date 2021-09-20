@@ -1,19 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { COLOR_DARK } from '../../constants';
+import Navigation from './Navigation';
+import Logo from './Logo';
 
 const Container = styled.div`
   background-color: ${COLOR_DARK};
-  height: 40px;
+  height: 60px;
+  display: flex;
 `;
 
 const Header: React.FC = () => {
   return (
     <Container>
-      <span>header</span>
-      <Link to="/a">a link</Link>
-      <Link to="/b">b link</Link>
+      <Logo />
+      <Navigation />
     </Container>
   );
 };

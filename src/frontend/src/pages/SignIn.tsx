@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLOR_GREY } from '../constants';
+import Form from '../components/forms/SignIn';
 
 const Container = styled.div`
-  background-color: ${COLOR_GREY};
-  height: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
-const Home: React.FC = () => {
+const SignIn: React.FC = () => {
   return (
     <Container>
-      <span>home</span>
+      <Form />
     </Container>
   );
 };
 
-export default Home;
+export default SignIn;

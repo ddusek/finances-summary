@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import { COLOR_LIGHT_GREY, COLOR_TEAL } from './constants';
+import { COLOR_LIGHT_GREY, COLOR_TEAL } from './utils/cssConstants';
 import Header from './components/header/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
+import { UserContext, initialUser } from './context/login';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -30,11 +31,13 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <GlobalStyle />
-      <Router>
-        <Header />
-        <Body />
-        <Footer />
-      </Router>
+      <UserContext.Provider value={initialUser}>
+        <Router>
+          <Header />
+          <Body />
+          <Footer />
+        </Router>
+      </UserContext.Provider>
     </div>
   );
 };

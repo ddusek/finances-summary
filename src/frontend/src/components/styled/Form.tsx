@@ -5,7 +5,9 @@ import {
   COLOR_LIGHT_GREY,
   COLOR_TEAL_DARK,
   COLOR_TEAL_VERY_DARK,
-} from '../../constants';
+  COLOR_RED,
+  FONT_SIZE_NORMAL,
+} from '../../utils/cssConstants';
 
 const Form = styled.form`
   width: 600px;
@@ -16,6 +18,35 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   text-align: center;
+
+  .button {
+    border: none;
+    margin: 10px 20px 20px 20px;
+    height: 40px;
+    width: 230px;
+    color: black;
+    line-height: 40px;
+    font-size: ${FONT_SIZE_NORMAL};
+    background-color: ${COLOR_LIGHT_GREY};
+    border-radius: 20px;
+    &:hover {
+      background-color: ${COLOR_TEAL};
+    }
+  }
+
+  .field-error {
+    position: absolute;
+    top: 25px;
+    color: ${COLOR_RED};
+    top: 30px;
+    width: 150px;
+    left: 405px;
+    font-size: ${FONT_SIZE_NORMAL};
+  }
+
+  .field-border-error {
+    border: 1px ${COLOR_RED} solid;
+  }
 `;
 
 const FormLabel = styled.label`
@@ -36,15 +67,15 @@ const FormLabel = styled.label`
       opacity: 0;
     }
   }
-  span {
+  span.field-text {
     position: absolute;
     top: 0;
     left: 45px;
     transform: translateY(30px);
-    font-size: 0.825em;
+    font-size: ${FONT_SIZE_NORMAL};
     transition-duration: 300ms;
   }
-  :focus-within > span,
+  :focus-within > span.field-text,
   input:not(:placeholder-shown) + span {
     color: ${COLOR_TEAL};
     transform: translateY(0px);
@@ -65,31 +96,25 @@ const ButtonContainer = styled.span`
 
 const SubmitButton = styled.input`
   border: none;
-  margin: 20px 20px 20px 20px;
-  height: 40px;
-  width: 230px;
-  background-color: ${COLOR_LIGHT_GREY};
-  border-radius: 20px;
-  &:hover {
-    background-color: ${COLOR_TEAL};
-  }
-`;
-
-const Button = styled.button`
-  border: none;
   margin: 10px 20px 20px 20px;
   height: 40px;
   width: 230px;
   background-color: ${COLOR_LIGHT_GREY};
+  font-size: ${FONT_SIZE_NORMAL};
   border-radius: 20px;
   &:hover {
     background-color: ${COLOR_TEAL};
+    cursor: pointer;
   }
 `;
 
 const ButtonText = styled.span`
   width: 200px;
   margin-top: 10px;
+
+  &.submit-error {
+    color: ${COLOR_RED};
+  }
 `;
 
 const Header = styled.h2`
@@ -113,7 +138,6 @@ export {
   SubmitButton,
   Header,
   HeaderContainer,
-  Button,
   ButtonsContainer,
   ButtonContainer,
   ButtonText,

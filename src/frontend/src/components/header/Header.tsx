@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLOR_DARK } from '../../constants';
+import { COLOR_DARK } from '../../utils/cssConstants';
 import Navigation from './Navigation';
 import Logo from './Logo';
 

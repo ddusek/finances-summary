@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLOR_GREY } from '../constants';
+import { COLOR_GREY } from '../utils/cssConstants';
 
 const Container = styled.div`
   background-color: ${COLOR_GREY};

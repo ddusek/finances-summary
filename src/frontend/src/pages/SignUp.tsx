@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import Form from '../components/forms/SignIn';
+import Form from '../components/forms/SignUp';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
   return (
     <Container>
       <Form />
@@ -15,4 +15,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

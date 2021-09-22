@@ -1,17 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   Form,
   FormLabel,
   SubmitButton,
-  Button,
   Header,
   HeaderContainer,
   ButtonsContainer,
   ButtonContainer,
   ButtonText,
-} from '../styles/Form';
+} from '../styled/Form';
 
 interface Inputs {
   username: string;
@@ -29,9 +28,9 @@ const SignIn: React.FC = () => {
   return (
     <div>
       <HeaderContainer>
-        <Header>Sign up</Header>
+        <Header>Sign in</Header>
       </HeaderContainer>
-      <Form action="Post" onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <FormLabel htmlFor="username">
           <input
             placeholder="Username"
@@ -80,7 +79,9 @@ const SignIn: React.FC = () => {
           </ButtonContainer>
           <ButtonContainer>
             <ButtonText>Already registered?</ButtonText>
-            <Button>Sign in here</Button>
+            <Link className="button" to="sign-up">
+              Sign up here
+            </Link>
           </ButtonContainer>
         </ButtonsContainer>
       </Form>

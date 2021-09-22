@@ -13,7 +13,7 @@ const Navigation: React.FC = () => {
     <Container>
       <NavigationItem link="/global-stocks" text="Global stocks" />
       <NavigationItem link="/my-stocks" text="My stocks" />
-      <NavigationItem link="/sign-in" text="Sign up" highlight />
+      <NavigationItem link="/sign-up" text="Sign up" highlight />
     </Container>
   );
 };

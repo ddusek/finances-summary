@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { COLOR_TEAL } from '../../constants';
+import { COLOR_TEAL } from '../../utils/cssConstants';
 
 const Container = styled.ul`
   margin-right: 15px;

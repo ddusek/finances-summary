@@ -110,7 +110,7 @@ const SubmitButton = styled.input`
 
 const ButtonText = styled.span`
   width: 200px;
-  height: 30px;
+  height: 36px;
 
   &.submit-error {
     color: ${COLOR_RED};

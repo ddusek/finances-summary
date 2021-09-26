@@ -4,3 +4,8 @@ export interface SignUpInputs {
   password: string;
   passwordVerify: string;
 }
+
+export interface SignInInputs {
+  login: string;
+  password: string;
+}

@@ -2,18 +2,27 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { UserRegister, IsSuccessStatus } from '../../api/requests';
+import { UserRegister } from '../../api/requests';
 import { UserRegisterBody, UserRegisterResponse } from '../../api/interfaces';
-import { SignUpInputs } from '../../types';
+import { SignUpInputs } from '../../interfaces';
 import { mapUserRegister } from '../../api/mappers';
 import * as F from '../styled/Form';
-import * as E from '../../utils/errors';
+import * as E from './constants';
 import { AxiosError } from 'axios';
 
 interface FormMessage {
   type: 'error' | 'success' | 'empty';
   msg?: string;
 }
+
+interface FieldError {
+  username?: boolean;
+  email?: boolean;
+  password?: boolean;
+  passwordVerify?: boolean;
+}
+
+const FieldErrorClass = 'field-border-error';
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -35,43 +44,56 @@ const SignUp: React.FC = () => {
   } = useForm<SignUpInputs>({ criteriaMode: 'all' });
 
   const [formMsg, setFormMsg] = useState<FormMessage>();
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordVerifyError, setPasswordVerifyError] = useState('');
+  const [fieldError, setFieldError] = useState<FieldError>({
+    username: false,
+    email: false,
+    password: false,
+    passwordVerify: false,
+  });
 
   const clearErrors = () => {
     setFormMsg({ type: 'empty' });
-    setPasswordError('');
-    setPasswordVerifyError('');
+    setFieldError({
+      username: false,
+      email: false,
+      password: false,
+      passwordVerify: false,
+    });
+  };
+
+  const setFieldsErrors = (data: UserRegisterResponse) => {
+    setFieldError({
+      email: data.email_conflict,
+      username: data.username_conflict,
+    });
   };
 
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     if (data.password !== data.passwordVerify) {
-      setPasswordError('field-border-error');
-      setPasswordVerifyError('field-border-error');
+      setFieldError({ password: true, passwordVerify: true });
       setFormMsg({ type: 'error', msg: E.PASSWORDS_DONT_MATCH });
       return;
     }
     clearErrors();
     const dataBody: UserRegisterBody = mapUserRegister(data);
-    const response = await UserRegister(dataBody)
-      .then((res) => {
+    await UserRegister(dataBody)
+      .then(() => {
         setFormMsg({ type: 'success', msg: E.REGISTERED_SUCCESSFULLY });
       })
       .catch((err: AxiosError) => {
-        console.log(err);
         switch (err?.response?.status) {
           case 409:
             setFormMsg({
               type: 'error',
               msg: getConflictErr(err.response.data),
             });
+            setFieldsErrors(err.response.data);
             return;
           default:
             setFormMsg({ type: 'error', msg: E.UNSPECIFIC_REQUEST_ERROR });
             return;
         }
       });
-    console.log(response);
   };
 
   return (
@@ -82,8 +104,9 @@ const SignUp: React.FC = () => {
       <F.Form onSubmit={handleSubmit(onSubmit)}>
         <F.FormLabel htmlFor="username">
           <input
-            placeholder="Username"
             id="username"
+            className={fieldError.username ? FieldErrorClass : ''}
+            placeholder="Username"
             autoComplete="off"
             {...register('username', {
               required: E.REQUIRED,
@@ -108,8 +131,9 @@ const SignUp: React.FC = () => {
         </F.FormLabel>
         <F.FormLabel htmlFor="email">
           <input
-            placeholder="Email"
             id="email"
+            className={fieldError.email ? FieldErrorClass : ''}
+            placeholder="Email"
             autoComplete="off"
             {...register('email', {
               required: E.REQUIRED,
@@ -134,9 +158,9 @@ const SignUp: React.FC = () => {
         </F.FormLabel>
         <F.FormLabel htmlFor="password">
           <input
-            className={passwordError}
-            placeholder="Password"
             id="password"
+            className={fieldError.password ? FieldErrorClass : ''}
+            placeholder="Password"
             type="password"
             {...register('password', { required: E.REQUIRED })}
           />
@@ -151,8 +175,8 @@ const SignUp: React.FC = () => {
         </F.FormLabel>
         <F.FormLabel htmlFor="password-verify">
           <input
-            className={passwordVerifyError}
             id="password-verify"
+            className={fieldError.passwordVerify ? FieldErrorClass : ''}
             placeholder="Password verify"
             type="password"
             {...register('passwordVerify', { required: E.REQUIRED })}

@@ -1,10 +1,11 @@
 import api from './base';
-import { UserRegisterBody, UserRegisterResponse } from './interfaces';
+import {
+  UserRegisterBody,
+  UserRegisterResponse,
+  UserLoginBody,
+  UserLoginResponse,
+} from './interfaces';
 import { AxiosResponse } from 'axios';
-
-export const IsSuccessStatus = (statusCode: number): boolean => {
-  return statusCode > 199 && statusCode < 300;
-};
 
 export const UserRegister = async (
   data: UserRegisterBody
@@ -13,5 +14,15 @@ export const UserRegister = async (
     UserRegisterBody,
     AxiosResponse<UserRegisterResponse>
   >('/user/register', data);
+  return response;
+};
+
+export const UserLogin = async (
+  data: UserLoginBody
+): Promise<AxiosResponse<UserLoginResponse>> => {
+  const response = api.post<UserLoginBody, AxiosResponse<UserLoginResponse>>(
+    '/user/login',
+    data
+  );
   return response;
 };

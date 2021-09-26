@@ -1,90 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import {
-  Form,
-  FormLabel,
-  SubmitButton,
-  Header,
-  HeaderContainer,
-  Buttons,
-  ButtonContainer,
-  ButtonText,
-} from '../styled/Form';
+import { ErrorMessage } from '@hookform/error-message';
+import { UserLogin } from '../../api/requests';
+import { UserLoginBody } from '../../api/interfaces';
+import { SignInInputs } from '../../interfaces';
+import { mapUserLogin } from '../../api/mappers';
+import * as F from '../styled/Form';
+import * as E from './constants';
+import { AxiosError } from 'axios';
 
-interface Inputs {
-  username: string;
-  email: string;
-  password: string;
-  passwordVerify: string;
+interface FormMessage {
+  type: 'error' | 'success' | 'empty';
+  msg?: string;
 }
 
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 const SignIn: React.FC = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInInputs>({ criteriaMode: 'all' });
+
+  const [formMsg, setFormMsg] = useState<FormMessage>();
+
+  const clearErrors = () => {
+    setFormMsg({ type: 'empty' });
+  };
+
+  const onSubmit: SubmitHandler<SignInInputs> = async (data) => {
+    clearErrors();
+    const dataBody: UserLoginBody = mapUserLogin(data);
+    await UserLogin(dataBody)
+      .then(() => {
+        setFormMsg({ type: 'success', msg: E.LOGIN_SUCCESSFUL });
+      })
+      .catch((err: AxiosError) => {
+        switch (err?.response?.status) {
+          case 401:
+            setFormMsg({ type: 'error', msg: E.WRONG_LOGIN_OR_PASSWORD });
+            return;
+          default:
+            setFormMsg({ type: 'error', msg: E.UNSPECIFIC_REQUEST_ERROR });
+            return;
+        }
+      });
+  };
+
   return (
     <div>
-      <HeaderContainer>
-        <Header>Sign in</Header>
-      </HeaderContainer>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormLabel htmlFor="username">
+      <F.HeaderContainer>
+        <F.Header>Sign up</F.Header>
+      </F.HeaderContainer>
+      <F.Form onSubmit={handleSubmit(onSubmit)}>
+        <F.FormLabel htmlFor="username">
           <input
-            placeholder="Username"
-            id="username"
-            {...register('username', {
-              required: true,
-              pattern: /^w+$/,
-              maxLength: 20,
+            id="login"
+            placeholder="Login"
+            {...register('login', {
+              required: E.REQUIRED,
+              maxLength: {
+                value: 320,
+                message: E.LOGIN_TOO_LONG,
+              },
             })}
           />
-          <span>Username</span>
-        </FormLabel>
-        <FormLabel htmlFor="email">
-          <input
-            placeholder="Email"
-            id="email"
-            {...register('email', {
-              required: true,
-              pattern: emailRegex,
-              maxLength: 320,
-            })}
+          <span className="field-text">Login</span>
+          <ErrorMessage
+            errors={errors}
+            name="login"
+            render={({ message }) => (
+              <span className="field-error">{message}</span>
+            )}
           />
-          <span>Email</span>
-        </FormLabel>
-        <FormLabel htmlFor="password">
+        </F.FormLabel>
+        <F.FormLabel htmlFor="password">
           <input
-            placeholder="Password"
             id="password"
+            placeholder="Password"
             type="password"
-            {...register('password', { required: true })}
+            {...register('password', { required: E.REQUIRED })}
           />
-          <span>Password</span>
-        </FormLabel>
-        <FormLabel htmlFor="password-verify">
-          <input
-            id="password-verify"
-            placeholder="Password verify"
-            type="password"
-            {...register('passwordVerify', { required: true })}
+          <span className="field-text">Password</span>
+          <ErrorMessage
+            errors={errors}
+            name="password"
+            render={({ message }) => (
+              <span className="field-error">{message}</span>
+            )}
           />
-          <span>Repeat password</span>
-        </FormLabel>
-        <Buttons>
-          <ButtonContainer>
-            <SubmitButton type="submit" value="Sign up"></SubmitButton>
-          </ButtonContainer>
-          <ButtonContainer>
-            <ButtonText>Already registered?</ButtonText>
+        </F.FormLabel>
+        <F.Buttons>
+          <F.ButtonContainer>
+            <F.ButtonText className={`submit-${formMsg?.type}`}>
+              {formMsg?.msg}
+            </F.ButtonText>
+            <F.SubmitButton type="submit" value="Sign up"></F.SubmitButton>
+          </F.ButtonContainer>
+          <F.ButtonContainer>
+            <F.ButtonText>Dont have account yet?</F.ButtonText>
             <Link className="button" to="sign-up">
               Sign up here
             </Link>
-          </ButtonContainer>
-        </Buttons>
-      </Form>
+          </F.ButtonContainer>
+        </F.Buttons>
+      </F.Form>
     </div>
   );
 };

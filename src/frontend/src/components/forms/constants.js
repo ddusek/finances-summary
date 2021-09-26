@@ -9,3 +9,6 @@ export const CONFLICT_USERNAME = 'Username already exists';
 export const CONFLICT_EMAIL = 'Email already exists';
 export const UNSPECIFIC_REQUEST_ERROR = 'There was and error, try again later';
 export const REGISTERED_SUCCESSFULLY = 'Successfully registered';
+export const LOGIN_TOO_LONG = 'Login too long';
+export const WRONG_LOGIN_OR_PASSWORD = 'Wrong login or password';
+export const LOGIN_SUCCESSFUL = 'Logged in';

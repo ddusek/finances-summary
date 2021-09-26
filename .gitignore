@@ -7,3 +7,4 @@ dist
 src/finances_summary/typings
 src/finances_summary/secrets
 src/finances_summary/logs
+src/frontend/secrets

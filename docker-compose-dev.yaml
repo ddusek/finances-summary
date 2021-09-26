@@ -30,17 +30,19 @@ services:
     depends_on:
       - mongo
 
-#   frontend:
-#     container_name: fs-frontend
-#     build:
-#       context: ./
-#       dockerfile: Frontend.Dockerfile
-#     ports: 
-#       - 8080:8080
-#     networks:
-#       - fs
-#     volumes:
-#       - ./src/frontend/src:/frontend/src
+  frontend:
+    container_name: fs-frontend
+    build:
+      context: ./
+      dockerfile: Frontend.Dockerfile
+    ports: 
+      - 3000:3000
+    networks:
+      - fs
+    volumes:
+      - ./src/frontend/src:/frontend/src
+    depends_on:
+      - starlette
 
 networks:
   fs:

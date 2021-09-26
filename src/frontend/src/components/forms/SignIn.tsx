@@ -7,7 +7,7 @@ import {
   SubmitButton,
   Header,
   HeaderContainer,
-  ButtonsContainer,
+  Buttons,
   ButtonContainer,
   ButtonText,
 } from '../styled/Form';
@@ -73,7 +73,7 @@ const SignIn: React.FC = () => {
           />
           <span>Repeat password</span>
         </FormLabel>
-        <ButtonsContainer>
+        <Buttons>
           <ButtonContainer>
             <SubmitButton type="submit" value="Sign up"></SubmitButton>
           </ButtonContainer>
@@ -83,7 +83,7 @@ const SignIn: React.FC = () => {
               Sign up here
             </Link>
           </ButtonContainer>
-        </ButtonsContainer>
+        </Buttons>
       </Form>
     </div>
   );

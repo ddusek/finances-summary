@@ -2,83 +2,98 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import {
-  Form,
-  FormLabel,
-  SubmitButton,
-  Header,
-  HeaderContainer,
-  ButtonsContainer,
-  ButtonContainer,
-  ButtonText,
-} from '../styled/Form';
-import {
-  REQUIRED,
-  USERNAME_INVALID,
-  USERNAME_TOO_LONG,
-  EMAIL_TOO_LONG,
-  EMAIL_WRONG_FORMAT,
-  PASSWORDS_DONT_MATCH,
-} from '../../utils/errors';
+import { UserRegister, IsSuccessStatus } from '../../api/requests';
+import { UserRegisterBody, UserRegisterResponse } from '../../api/interfaces';
+import { SignUpInputs } from '../../types';
+import { mapUserRegister } from '../../api/mappers';
+import * as F from '../styled/Form';
+import * as E from '../../utils/errors';
+import { AxiosError } from 'axios';
 
-interface Inputs {
-  username: string;
-  email: string;
-  password: string;
-  passwordVerify: string;
+interface FormMessage {
+  type: 'error' | 'success' | 'empty';
+  msg?: string;
 }
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const getConflictErr = (data: UserRegisterResponse) => {
+  if (data.email_conflict && data.username_conflict) {
+    return E.CONFLICT_USERNAME_AND_EMAIL;
+  } else if (data.username_conflict) {
+    return E.CONFLICT_USERNAME;
+  }
+  return E.CONFLICT_EMAIL;
+};
 
 const SignUp: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ criteriaMode: 'all' });
+  } = useForm<SignUpInputs>({ criteriaMode: 'all' });
 
-  const [formError, setFormError] = useState('');
+  const [formMsg, setFormMsg] = useState<FormMessage>();
   const [passwordError, setPasswordError] = useState('');
   const [passwordVerifyError, setPasswordVerifyError] = useState('');
 
   const clearErrors = () => {
-    setFormError('');
+    setFormMsg({ type: 'empty' });
     setPasswordError('');
     setPasswordVerifyError('');
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     if (data.password !== data.passwordVerify) {
       setPasswordError('field-border-error');
       setPasswordVerifyError('field-border-error');
-      setFormError(PASSWORDS_DONT_MATCH);
+      setFormMsg({ type: 'error', msg: E.PASSWORDS_DONT_MATCH });
       return;
     }
     clearErrors();
-    console.log(data);
+    const dataBody: UserRegisterBody = mapUserRegister(data);
+    const response = await UserRegister(dataBody)
+      .then((res) => {
+        setFormMsg({ type: 'success', msg: E.REGISTERED_SUCCESSFULLY });
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        switch (err?.response?.status) {
+          case 409:
+            setFormMsg({
+              type: 'error',
+              msg: getConflictErr(err.response.data),
+            });
+            return;
+          default:
+            setFormMsg({ type: 'error', msg: E.UNSPECIFIC_REQUEST_ERROR });
+            return;
+        }
+      });
+    console.log(response);
   };
 
   return (
     <div>
-      <HeaderContainer>
-        <Header>Sign up</Header>
-      </HeaderContainer>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormLabel htmlFor="username">
+      <F.HeaderContainer>
+        <F.Header>Sign up</F.Header>
+      </F.HeaderContainer>
+      <F.Form onSubmit={handleSubmit(onSubmit)}>
+        <F.FormLabel htmlFor="username">
           <input
             placeholder="Username"
             id="username"
             autoComplete="off"
             {...register('username', {
-              required: REQUIRED,
+              required: E.REQUIRED,
               pattern: {
-                message: USERNAME_INVALID,
+                message: E.USERNAME_INVALID,
                 value: /^[a-zA-Z0-9_]+$/,
               },
               maxLength: {
                 value: 20,
-                message: USERNAME_TOO_LONG,
+                message: E.USERNAME_TOO_LONG,
               },
             })}
           />
@@ -90,21 +105,21 @@ const SignUp: React.FC = () => {
               <span className="field-error">{message}</span>
             )}
           />
-        </FormLabel>
-        <FormLabel htmlFor="email">
+        </F.FormLabel>
+        <F.FormLabel htmlFor="email">
           <input
             placeholder="Email"
             id="email"
             autoComplete="off"
             {...register('email', {
-              required: REQUIRED,
+              required: E.REQUIRED,
               pattern: {
                 value: emailRegex,
-                message: EMAIL_WRONG_FORMAT,
+                message: E.EMAIL_WRONG_FORMAT,
               },
               maxLength: {
                 value: 320,
-                message: EMAIL_TOO_LONG,
+                message: E.EMAIL_TOO_LONG,
               },
             })}
           />
@@ -116,14 +131,14 @@ const SignUp: React.FC = () => {
               <span className="field-error">{message}</span>
             )}
           />
-        </FormLabel>
-        <FormLabel htmlFor="password">
+        </F.FormLabel>
+        <F.FormLabel htmlFor="password">
           <input
             className={passwordError}
             placeholder="Password"
             id="password"
             type="password"
-            {...register('password', { required: REQUIRED })}
+            {...register('password', { required: E.REQUIRED })}
           />
           <span className="field-text">Password</span>
           <ErrorMessage
@@ -133,14 +148,14 @@ const SignUp: React.FC = () => {
               <span className="field-error">{message}</span>
             )}
           />
-        </FormLabel>
-        <FormLabel htmlFor="password-verify">
+        </F.FormLabel>
+        <F.FormLabel htmlFor="password-verify">
           <input
             className={passwordVerifyError}
             id="password-verify"
             placeholder="Password verify"
             type="password"
-            {...register('passwordVerify', { required: REQUIRED })}
+            {...register('passwordVerify', { required: E.REQUIRED })}
           />
           <span className="field-text">Repeat password</span>
           <ErrorMessage
@@ -150,20 +165,22 @@ const SignUp: React.FC = () => {
               <span className="field-error">{message}</span>
             )}
           />
-        </FormLabel>
-        <ButtonsContainer>
-          <ButtonContainer>
-            <ButtonText className="submit-error">{formError}</ButtonText>
-            <SubmitButton type="submit" value="Sign up"></SubmitButton>
-          </ButtonContainer>
-          <ButtonContainer>
-            <ButtonText>Already registered?</ButtonText>
+        </F.FormLabel>
+        <F.Buttons>
+          <F.ButtonContainer>
+            <F.ButtonText className={`submit-${formMsg?.type}`}>
+              {formMsg?.msg}
+            </F.ButtonText>
+            <F.SubmitButton type="submit" value="Sign up"></F.SubmitButton>
+          </F.ButtonContainer>
+          <F.ButtonContainer>
+            <F.ButtonText>Already registered?</F.ButtonText>
             <Link className="button" to="sign-in">
               Sign in here
             </Link>
-          </ButtonContainer>
-        </ButtonsContainer>
-      </Form>
+          </F.ButtonContainer>
+        </F.Buttons>
+      </F.Form>
     </div>
   );
 };

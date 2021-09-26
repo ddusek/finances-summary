@@ -82,7 +82,7 @@ const FormLabel = styled.label`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const Buttons = styled.div`
   display: flex;
   margin-top: 20px;
 `;
@@ -110,10 +110,14 @@ const SubmitButton = styled.input`
 
 const ButtonText = styled.span`
   width: 200px;
-  margin-top: 10px;
+  height: 30px;
 
   &.submit-error {
     color: ${COLOR_RED};
+  }
+
+  &.submit-success {
+    color: ${COLOR_TEAL};
   }
 `;
 
@@ -138,7 +142,7 @@ export {
   SubmitButton,
   Header,
   HeaderContainer,
-  ButtonsContainer,
+  Buttons,
   ButtonContainer,
   ButtonText,
 };

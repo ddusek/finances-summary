@@ -45,5 +45,4 @@ def all_routes() -> list[Mount]:
                   Mount('/user', routes=_user_routes()),
                   Mount('/transaction', routes=_transaction_routes()),
                   Mount('/stock', routes=_stock_routes())
-              ])
-    ]
+              ])]

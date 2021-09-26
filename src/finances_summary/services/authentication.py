@@ -1,16 +1,16 @@
-import json
 from datetime import datetime, timedelta
 from jwt import encode
 from argon2 import PasswordHasher
 from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchError,
                                InvalidHash)
-from mongoengine import connect, ValidationError
+from mongoengine import ValidationError, Q
 from starlette.responses import JSONResponse, Response
 from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_422_UNPROCESSABLE_ENTITY,
                               HTTP_409_CONFLICT, HTTP_200_OK)
-from finances_summary.models.authentication import JwtUserModel
-from finances_summary.models.mongo.users import Users
 from finances_summary.logger import LOGGER
+from finances_summary.models.authentication import (JwtUserModel, RegistrationConflict,
+                                                    RegistrationResponse)
+from finances_summary.models.mongo.users import Users
 from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
                                        JWT_PUBLIC_KEY_PATH)
 
@@ -52,12 +52,26 @@ def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) 
         return encoded_jwt
 
 
-def _find_user(login) -> Users:
+def _find_user(login: str) -> Users:
     """Find user either by email or username.
     """
     if _is_email(login):
         return Users.objects(email=login).first()
     return Users.objects(username=login).first()
+
+
+def _has_conflicts(username: str, email: str) -> RegistrationConflict:
+    """Check if username and/or email is already used.
+    Return Tuple of booleans (username_used, email_used).
+    """
+    users = Users.objects(Q(username=username) | Q(email=email))
+    conflict = RegistrationConflict()
+    for user in users:
+        if user.username == username:
+            conflict.username_conflict = True
+        if user.email == email:
+            conflict.email_conflict = True
+    return conflict
 
 
 def register(username: str, password: str, email: str) -> Response:
@@ -66,19 +80,21 @@ def register(username: str, password: str, email: str) -> Response:
     if not username or not password or not email:
         return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
 
-    if _find_user(email) is not None:
-        print(_find_user(email))
-        return Response(status_code=HTTP_409_CONFLICT)
+    conflicts = _has_conflicts(username, email)
+    if conflicts.username_conflict or conflicts.email_conflict:
+        # Username and/or email already exist.
+        response = RegistrationResponse(False, conflicts.username_conflict,
+                                        conflicts.email_conflict)
+        return JSONResponse(response.as_dict(), status_code=HTTP_409_CONFLICT)
     try:
+        token = _generate_token(JwtUserModel(username))
         pwd_hasher = PasswordHasher()
         user = Users().create_new(username, email, pwd_hasher.hash(password))
-        try:
-            user.save()
-        except ValidationError:
-            return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
-        token = _generate_token(JwtUserModel(username))
-        return JSONResponse({'token': token, 'id': str(user.pk), 'username': username})
-    except HashingError as err:
+        user.save()
+        # Success response.
+        response = RegistrationResponse(token=token, _id=str(user.pk), username=username)
+        return JSONResponse(response.as_dict())
+    except (HashingError, ValidationError) as err:
         LOGGER.exception(err)
         return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
 

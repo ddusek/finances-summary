@@ -30,8 +30,9 @@ async def add_transaction(request: Request) -> Response:
     """Add a new transaction.
     """
     params = await request.json()
-    return add(params['date'], params['record_type'], params['symbol'], params['amount'],
-               params['price_per_unit'])
+    return add(**params)
+    # return add(params['date'], params['record_type'], params['symbol'], params['amount'],
+    #            params['price_per_unit'])
 
 
 async def remove_transaction(request: Request) -> Response:
@@ -59,3 +60,4 @@ async def user_summary_symbol(request: Request) -> Response:
     """Summary of user's specific stock.
     """
     return symbol(request.path_params['symbol'])
+

@@ -2,6 +2,7 @@ yapf
 pylint
 pylama
 mypy
+rope
 
 pytest
 cryptography

@@ -4,6 +4,7 @@ import {
   UserRegisterResponse,
   UserLoginBody,
   UserLoginResponse,
+  UserVerifyResponse,
 } from './interfaces';
 import { AxiosResponse } from 'axios';
 
@@ -24,5 +25,12 @@ export const UserLogin = async (
     '/user/login',
     data
   );
+  return response;
+};
+
+export const UserVerify = async (): Promise<
+  AxiosResponse<UserVerifyResponse>
+> => {
+  const response = api.get<UserVerifyResponse>('/user/verify');
   return response;
 };

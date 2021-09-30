@@ -26,3 +26,7 @@ export interface UserLoginResponse {
   _id: string;
   username: string;
 }
+
+export interface UserVerifyResponse {
+  authorized: boolean;
+}

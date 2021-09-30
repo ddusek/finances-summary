@@ -27,3 +27,10 @@ class RegistrationResponse(BaseResponse):
     token: str = ''
     _id: str = ''
     username: str = ''
+
+
+@dataclass
+class AuthorizedResponse(BaseResponse):
+    """Response on authorized request.
+    """
+    authorized: bool = False

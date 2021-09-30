@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface User {
+export interface User {
   loggedIn: boolean;
   username: string;
 }

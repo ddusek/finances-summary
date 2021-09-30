@@ -32,7 +32,8 @@ const SignIn: React.FC = () => {
     clearErrors();
     const dataBody: UserLoginBody = mapUserLogin(data);
     await UserLogin(dataBody)
-      .then(() => {
+      .then((res) => {
+        localStorage.setItem('token', res.data.token);
         setFormMsg({ type: 'success', msg: E.LOGIN_SUCCESSFUL });
       })
       .catch((err: AxiosError) => {

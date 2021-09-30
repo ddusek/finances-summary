@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { COLOR_LIGHT_GREY, COLOR_TEAL } from './utils/cssConstants';
 import Header from './components/header/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
-import { UserContext, initialUser } from './context/login';
+import { UserContext, initialUser, User } from './context/user';
+import { UserVerify } from './api/requests';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -28,10 +29,27 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
+  const [user, setUser] = useState<User>(initialUser);
+  useEffect(() => {
+    UserVerify()
+      .then((res) => {
+        if (res.data.authorized) {
+          setUser({ loggedIn: true, username: 'todo' });
+          console.log('token');
+        } else {
+          setUser({ loggedIn: false, username: '' });
+          console.log('no token');
+        }
+      })
+      .catch(() => {
+        setUser({ loggedIn: false, username: '' });
+        console.log('err no token');
+      });
+  }, []);
   return (
     <div className="App">
       <GlobalStyle />
-      <UserContext.Provider value={initialUser}>
+      <UserContext.Provider value={user}>
         <Router>
           <Header />
           <Body />

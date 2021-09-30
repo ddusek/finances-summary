@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../../context/user';
 import NavigationItem from './NavigationItem';
 
 const Container = styled.nav`
@@ -9,11 +10,14 @@ const Container = styled.nav`
 `;
 
 const Navigation: React.FC = () => {
+  const user = useContext(UserContext);
   return (
     <Container>
       <NavigationItem link="/global-stocks" text="Global stocks" />
-      <NavigationItem link="/my-stocks" text="My stocks" />
-      <NavigationItem link="/sign-up" text="Sign up" highlight />
+      {user.loggedIn && <NavigationItem link="/my-stocks" text="My stocks" />}
+      {!user.loggedIn && (
+        <NavigationItem link="/sign-up" text="Sign up" highlight />
+      )}
     </Container>
   );
 };

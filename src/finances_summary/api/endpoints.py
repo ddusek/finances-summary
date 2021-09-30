@@ -1,6 +1,6 @@
 from starlette.responses import Response
 from starlette.requests import Request
-from finances_summary.services.authentication import register, login, logout
+from finances_summary.services.authentication import register, login, verify_token
 from finances_summary.services.transaction import add, remove, list_
 from finances_summary.services.user_summary import total, symbol
 
@@ -19,11 +19,12 @@ async def login_user(request: Request) -> Response:
     return login(params['login'], params['password'])
 
 
-async def logout_user(request: Request) -> Response:
+async def verify_user_token(request: Request) -> Response:
     """Logout a user.
     """
-    params = await request.json()
-    return logout(params['token'], params['username'])
+    cookies = request.cookies
+    token: str = cookies['token'] if 'token' in cookies else ''
+    return verify_token(token)
 
 
 async def add_transaction(request: Request) -> Response:

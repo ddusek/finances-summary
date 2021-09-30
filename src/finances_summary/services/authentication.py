@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from jwt import encode
+from jwt import encode, decode, DecodeError
 from argon2 import PasswordHasher
 from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchError,
                                InvalidHash)
@@ -8,8 +8,8 @@ from starlette.responses import JSONResponse, Response
 from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_422_UNPROCESSABLE_ENTITY,
                               HTTP_409_CONFLICT, HTTP_200_OK)
 from finances_summary.logger import LOGGER
-from finances_summary.models.authentication import (JwtUserModel, RegistrationConflict,
-                                                    RegistrationResponse)
+from finances_summary.models.authentication import (
+    JwtUserModel, RegistrationConflict, RegistrationResponse, AuthorizedResponse)
 from finances_summary.models.mongo.users import Users
 from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
                                        JWT_PUBLIC_KEY_PATH)
@@ -83,24 +83,32 @@ def register(username: str, password: str, email: str) -> Response:
     conflicts = _has_conflicts(username, email)
     if conflicts.username_conflict or conflicts.email_conflict:
         # Username and/or email already exist.
-        response = RegistrationResponse(False, conflicts.username_conflict,
-                                        conflicts.email_conflict)
-        return JSONResponse(response.as_dict(), status_code=HTTP_409_CONFLICT)
+        reg_response = RegistrationResponse(False, conflicts.username_conflict,
+                                            conflicts.email_conflict)
+        return JSONResponse(reg_response.as_dict(), status_code=HTTP_409_CONFLICT)
     try:
         token = _generate_token(JwtUserModel(username))
         pwd_hasher = PasswordHasher()
         user = Users().create_new(username, email, pwd_hasher.hash(password))
         user.save()
         # Success response.
-        response = RegistrationResponse(token=token, _id=str(user.pk), username=username)
-        return JSONResponse(response.as_dict())
+        reg_response = RegistrationResponse(token=token,
+                                            _id=str(user.pk),
+                                            username=username)
+        response = JSONResponse(reg_response.as_dict())
+        response.set_cookie('token',
+                            token,
+                            expires=60 * 60 * 24 * 365,
+                            httponly=True,
+                            secure=True)
+        return response
     except (HashingError, ValidationError) as err:
         LOGGER.exception(err)
         return Response(status_code=HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 def login(login: str, password: str) -> Response:
-    """Validate password and return dictionary according to result.
+    """Validate password and set token cookie.
     """
     user = _find_user(login)
     if user is None:
@@ -111,12 +119,16 @@ def login(login: str, password: str) -> Response:
             # If user was verified, rehash password if it's needed.
             if pwd_hasher.check_needs_rehash(user["password"]):
                 _rehash_password(user, password)
-
-            return JSONResponse({
+            response = JSONResponse({
                 'id': str(user.pk),
-                'token': _generate_token(JwtUserModel(login)),
                 'username': user.username,
             })
+            response.set_cookie('token',
+                                _generate_token(JwtUserModel(login)),
+                                expires=60 * 60 * 24 * 365,
+                                samesite='none',
+                                secure=True)
+            return response
         return Response(status_code=HTTP_401_UNAUTHORIZED)
 
     except (VerificationError, VerifyMismatchError) as err:
@@ -127,11 +139,14 @@ def login(login: str, password: str) -> Response:
         return Response(status_code=HTTP_401_UNAUTHORIZED)
 
 
-def logout(token: str, username: str) -> Response:
-    """Logout user.
+def verify_token(token: str) -> Response:
+    """Verify user token.
     """
-
-    #  TODO remove token from cookie, endpoint might not be needed.
-    token = ''
-
-    return Response(status_code=HTTP_200_OK)
+    if not token:
+        return JSONResponse(AuthorizedResponse().as_dict())
+    with open(JWT_PUBLIC_KEY_PATH, 'r', encoding='UTF-8') as file:
+        try:
+            decode(token, file.read(), algorithms=[JWT_ALGORITHM])
+            return JSONResponse(AuthorizedResponse(True).as_dict())
+        except DecodeError:
+            return JSONResponse(AuthorizedResponse().as_dict())

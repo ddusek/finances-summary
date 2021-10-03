@@ -1,5 +1,6 @@
 from starlette.responses import Response
 from starlette.requests import Request
+from starlette.authentication import requires
 from finances_summary.services.authentication import register, login, verify_token
 from finances_summary.services.transaction import add, remove, list_
 from finances_summary.services.user_summary import total, symbol
@@ -20,13 +21,14 @@ async def login_user(request: Request) -> Response:
 
 
 async def verify_user_token(request: Request) -> Response:
-    """Logout a user.
+    """Verify user.
     """
     cookies = request.cookies
     token: str = cookies['token'] if 'token' in cookies else ''
     return verify_token(token)
 
 
+@requires('authenticated')
 async def add_transaction(request: Request) -> Response:
     """Add a new transaction.
     """
@@ -36,6 +38,7 @@ async def add_transaction(request: Request) -> Response:
     #            params['price_per_unit'])
 
 
+@requires('authenticated')
 async def remove_transaction(request: Request) -> Response:
     """Remove a transaction.
     """
@@ -43,6 +46,7 @@ async def remove_transaction(request: Request) -> Response:
     return remove(params['object_id'])
 
 
+@requires('authenticated')
 async def list_transactions(request: Request) -> Response:
     """List user's transactions.
     """
@@ -51,12 +55,14 @@ async def list_transactions(request: Request) -> Response:
     return list_(type_, symbol)
 
 
+@requires('authenticated')
 async def user_summary_total(request: Request) -> Response:
     """Summary of user's finances.
     """
     return total()
 
 
+@requires('authenticated')
 async def user_summary_symbol(request: Request) -> Response:
     """Summary of user's specific stock.
     """

@@ -1,6 +1,7 @@
-from dataclasses import dataclass, asdict
-from datetime import datetime
+from dataclasses import dataclass
 from finances_summary.models.base import BaseResponse
+
+
 @dataclass
 class JwtUserModel:
     """JWT data of logged in user.

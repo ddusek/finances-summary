@@ -1,32 +1,24 @@
-import base64
-import binascii
-from starlette.authentication import (AuthenticationBackend, AuthenticationError,
-                                      SimpleUser, UnauthenticatedUser, AuthCredentials,
-                                      requires)
+from starlette.authentication import (
+    AuthenticationBackend,
+    SimpleUser,
+    AuthCredentials,
+)
 from starlette.middleware import Middleware
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from finances_summary import settings
+from finances_summary.services.authentication import token_valid
 
 
 class CustomAuthBackend(AuthenticationBackend):
-    async def authenticate(self, request):
-        if "Authorization" not in request.headers:
-            return
-
-        auth = request.headers["Authorization"]
-        try:
-            scheme, credentials = auth.split()
-            if scheme.lower() != 'basic':
-                return
-            decoded = base64.b64decode(credentials).decode("ascii")
-        except (ValueError, UnicodeDecodeError, binascii.Error) as exc:
-            raise AuthenticationError('Invalid basic auth credentials')
-
-        username, _, password = decoded.partition(":")
-        # TODO: You'd want to verify the username and password here.
-        return AuthCredentials(["authenticated"]), SimpleUser(username)
+    """Authentication middleware.
+    """
+    async def authenticate(self, conn):
+        token = conn.cookies['token'] if 'token' in conn.cookies else ''
+        if token_valid(token):
+            return AuthCredentials(["authenticated"]), SimpleUser('')
+        return
 
 
 def get_middlewares() -> list[Middleware]:

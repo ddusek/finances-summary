@@ -6,21 +6,13 @@ from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchEr
 from mongoengine import ValidationError, Q
 from starlette.responses import JSONResponse, Response
 from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_422_UNPROCESSABLE_ENTITY,
-                              HTTP_409_CONFLICT, HTTP_200_OK)
+                              HTTP_409_CONFLICT)
 from finances_summary.logger import LOGGER
 from finances_summary.models.authentication import (
     JwtUserModel, RegistrationConflict, RegistrationResponse, AuthorizedResponse)
 from finances_summary.models.mongo.users import Users
 from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
                                        JWT_PUBLIC_KEY_PATH)
-
-# def authorized(func: callable):
-#     def decorator(*args, **kwargs):
-#         if request.user.is_authenticated:
-#             return func
-#         else:
-#             return Response(status_code=HTTP_401_UNAUTHORIZED)
-#     return decorator
 
 
 def _is_email(login: str) -> bool:
@@ -139,14 +131,22 @@ def login(login: str, password: str) -> Response:
         return Response(status_code=HTTP_401_UNAUTHORIZED)
 
 
-def verify_token(token: str) -> Response:
-    """Verify user token.
+def token_valid(token: str) -> bool:
+    """Return True if jwt token is valid.
     """
     if not token:
-        return JSONResponse(AuthorizedResponse().as_dict())
+        return False
     with open(JWT_PUBLIC_KEY_PATH, 'r', encoding='UTF-8') as file:
         try:
             decode(token, file.read(), algorithms=[JWT_ALGORITHM])
-            return JSONResponse(AuthorizedResponse(True).as_dict())
+            return True
         except DecodeError:
-            return JSONResponse(AuthorizedResponse().as_dict())
+            return False
+
+
+def verify_token(token: str) -> Response:
+    """Verify user token.
+    """
+    if token_valid(token):
+        return JSONResponse(AuthorizedResponse(True).as_dict())
+    return JSONResponse(AuthorizedResponse().as_dict())

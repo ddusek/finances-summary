@@ -30,3 +30,12 @@ export interface UserLoginResponse {
 export interface UserVerifyResponse {
   authorized: boolean;
 }
+
+export interface AddTransactionBody {
+  date: Date;
+  record_type: 'BUY' | 'SELL';
+  symbol: string;
+  amount: number;
+  fee: number;
+  price_per_unit: number;
+}

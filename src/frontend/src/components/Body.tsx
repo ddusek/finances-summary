@@ -5,6 +5,8 @@ import { COLOR_GREY } from '../utils/cssConstants';
 import Home from '../pages/Home';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
+import MyStocks from '../pages/MyStocks';
+import NotFound from '../pages/NotFound';
 
 const Container = styled.div`
   background-color: ${COLOR_GREY};
@@ -16,7 +18,9 @@ const Body: React.FC = () => {
       <Switch>
         <Route path="/sign-up" component={SignUp} />
         <Route path="/sign-in" component={SignIn} />
-        <Route path="/" component={Home} />
+        <Route path="/my-stocks" component={MyStocks} />
+        <Route path="/" exact component={Home} />
+        <Route component={NotFound} />
       </Switch>
     </Container>
   );

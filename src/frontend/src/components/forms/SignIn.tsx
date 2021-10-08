@@ -54,7 +54,7 @@ const SignIn: React.FC = () => {
         <F.Header>Sign up</F.Header>
       </F.HeaderContainer>
       <F.Form onSubmit={handleSubmit(onSubmit)}>
-        <F.FormLabel htmlFor="username">
+        <F.FormLabel htmlFor="login">
           <input
             id="login"
             placeholder="Login"

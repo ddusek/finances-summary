@@ -7,6 +7,7 @@ import {
   COLOR_TEAL_VERY_DARK,
   COLOR_RED,
   FONT_SIZE_NORMAL,
+  COLOR_WHITE,
 } from '../../utils/cssConstants';
 
 const Form = styled.form`
@@ -32,6 +33,27 @@ const Form = styled.form`
     &:hover {
       background-color: ${COLOR_TEAL};
     }
+  }
+
+  .dropdown {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    margin: 20px 20px 0 20px;
+    width: calc(100% - 76px);
+    padding: 5px 35px 5px 5px;
+    font-size: ${FONT_SIZE_NORMAL};
+    color: ${COLOR_LIGHT_GREY};
+    border: none;
+    background-color: ${COLOR_TEAL_VERY_DARK};
+    background-image: url('/arrow-down.svg');
+    background-size: 28px;
+    background-position-x: 98%;
+    background-position-y: 10px;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    height: 37px;
   }
 
   .field-error {
@@ -65,6 +87,15 @@ const FormLabel = styled.label`
     border-radius: 10px;
     &::placeholder {
       opacity: 0;
+    }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type='number'] {
+      -moz-appearance: textfield;
     }
   }
   span.field-text {

@@ -1,8 +1,5 @@
 import os
-import logging
 import urllib.parse
-from datetime import date
-from pymongo import MongoClient
 from starlette.config import Config
 from starlette.datastructures import Secret, CommaSeparatedStrings
 

@@ -16,11 +16,11 @@ services:
     volumes:
       - ./scripts/mongo-entrypoint-dev.js:/docker-entrypoint-initdb.d/mongo-entrypoint-dev.js:ro
 
-  starlette:
-    container_name: fs-starlette
+  api:
+    container_name: fs-api
     build:
       context: ./
-      dockerfile: ./Starlette.Dockerfile
+      dockerfile: ./Api.Dockerfile
     ports:
       - 8000:8000
     networks:
@@ -42,7 +42,7 @@ services:
     volumes:
       - ./src/frontend/src:/frontend/src
     depends_on:
-      - starlette
+      - api
 
 networks:
   fs:

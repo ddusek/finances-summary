@@ -4,8 +4,10 @@ from starlette.authentication import requires
 from finances_summary.services.authentication import register, login, verify_token
 from finances_summary.services.transaction import add, remove, list_
 from finances_summary.services.user_summary import total, symbol
+from finances_summary.decorators import bind_request
 
 
+@bind_request
 async def register_user(request: Request) -> Response:
     """Register a new user.
     """
@@ -13,6 +15,7 @@ async def register_user(request: Request) -> Response:
     return register(params['username'], params['password'], params['email'])
 
 
+@bind_request
 async def login_user(request: Request) -> Response:
     """Login a user.
     """
@@ -20,6 +23,7 @@ async def login_user(request: Request) -> Response:
     return login(params['login'], params['password'])
 
 
+@bind_request
 async def verify_user_token(request: Request) -> Response:
     """Verify user.
     """
@@ -28,16 +32,16 @@ async def verify_user_token(request: Request) -> Response:
     return verify_token(token)
 
 
+@bind_request
 @requires('authenticated')
 async def add_transaction(request: Request) -> Response:
     """Add a new transaction.
     """
     params = await request.json()
     return add(**params)
-    # return add(params['date'], params['record_type'], params['symbol'], params['amount'],
-    #            params['price_per_unit'])
 
 
+@bind_request
 @requires('authenticated')
 async def remove_transaction(request: Request) -> Response:
     """Remove a transaction.
@@ -46,6 +50,7 @@ async def remove_transaction(request: Request) -> Response:
     return remove(params['object_id'])
 
 
+@bind_request
 @requires('authenticated')
 async def list_transactions(request: Request) -> Response:
     """List user's transactions.
@@ -55,6 +60,7 @@ async def list_transactions(request: Request) -> Response:
     return list_(type_, symbol)
 
 
+@bind_request
 @requires('authenticated')
 async def user_summary_total(request: Request) -> Response:
     """Summary of user's finances.
@@ -62,9 +68,9 @@ async def user_summary_total(request: Request) -> Response:
     return total()
 
 
+@bind_request
 @requires('authenticated')
 async def user_summary_symbol(request: Request) -> Response:
     """Summary of user's specific stock.
     """
     return symbol(request.path_params['symbol'])
-

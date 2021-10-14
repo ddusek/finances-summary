@@ -14,7 +14,9 @@ class UserTransactions(Document):
     """
     user = ObjectIdField(required=True)
     date = DateTimeField(required=True)
-    record_type = StringField(choices=[TransactionType.BUY, TransactionType.SELL],
+    record_type = StringField(choices=[
+        TransactionType.BUY.name, TransactionType.SELL.name
+    ],
                               required=True)
     symbol = StringField(required=True)
     amount = DecimalField(precision=9, required=True)

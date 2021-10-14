@@ -1,3 +1,4 @@
+from typing import Union
 from datetime import datetime, timedelta
 from jwt import encode, decode, DecodeError
 from argon2 import PasswordHasher
@@ -79,13 +80,13 @@ def register(username: str, password: str, email: str) -> Response:
                                             conflicts.email_conflict)
         return JSONResponse(reg_response.as_dict(), status_code=HTTP_409_CONFLICT)
     try:
-        token = _generate_token(JwtUserModel(username))
         pwd_hasher = PasswordHasher()
         user = Users().create_new(username, email, pwd_hasher.hash(password))
         user.save()
+        token = _generate_token(JwtUserModel(username, user.id))
         # Success response.
         reg_response = RegistrationResponse(token=token,
-                                            _id=str(user.pk),
+                                            _id=str(user.id),
                                             username=username)
         response = JSONResponse(reg_response.as_dict())
         response.set_cookie('token',
@@ -112,11 +113,11 @@ def login(login: str, password: str) -> Response:
             if pwd_hasher.check_needs_rehash(user["password"]):
                 _rehash_password(user, password)
             response = JSONResponse({
-                'id': str(user.pk),
+                'id': str(user.id),
                 'username': user.username,
             })
             response.set_cookie('token',
-                                _generate_token(JwtUserModel(login)),
+                                _generate_token(JwtUserModel(login, user.id)),
                                 expires=60 * 60 * 24 * 365,
                                 samesite='none',
                                 secure=True)
@@ -129,6 +130,17 @@ def login(login: str, password: str) -> Response:
     except InvalidHash as err:
         LOGGER.exception(err)
         return Response(status_code=HTTP_401_UNAUTHORIZED)
+
+
+def decode_token(token: str) -> Union[JwtUserModel, None]:
+    if not token:
+        return None
+    with open(JWT_PUBLIC_KEY_PATH, 'r', encoding='UTF-8') as file:
+        try:
+            json_data = decode(token, file.read(), algorithms=[JWT_ALGORITHM])
+            return JwtUserModel(**json_data)
+        except DecodeError:
+            return None
 
 
 def token_valid(token: str) -> bool:

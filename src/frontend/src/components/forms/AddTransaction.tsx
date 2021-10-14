@@ -4,11 +4,12 @@ import ReactDatePicker from 'react-datepicker';
 import { ErrorMessage } from '@hookform/error-message';
 import { AddTransactionReq } from '../../api/requests';
 import { AddTransactionBody } from '../../api/interfaces';
-import { SignInInputs } from '../../interfaces';
+import { AddTransactionInputs } from '../../interfaces';
 import * as F from '../styled/Form';
 import * as E from './constants';
 import { AxiosError } from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
+import { mapAddTransaction } from '../../api/mappers';
 
 interface FormMessage {
   type: 'error' | 'success' | 'empty';
@@ -21,7 +22,7 @@ const AddTransactionForm: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AddTransactionBody>({ criteriaMode: 'all' });
+  } = useForm<AddTransactionInputs>({ criteriaMode: 'all' });
 
   const [formMsg, setFormMsg] = useState<FormMessage>();
 
@@ -29,9 +30,10 @@ const AddTransactionForm: React.FC = () => {
     setFormMsg({ type: 'empty' });
   };
 
-  const onSubmit: SubmitHandler<AddTransactionBody> = async (data) => {
+  const onSubmit: SubmitHandler<AddTransactionInputs> = async (data) => {
     clearErrors();
-    await AddTransactionReq(data)
+    const dataBody = mapAddTransaction(data);
+    await AddTransactionReq(dataBody)
       .then(() => {
         setFormMsg({ type: 'success', msg: E.LOGIN_SUCCESSFUL });
       })
@@ -112,9 +114,8 @@ const AddTransactionForm: React.FC = () => {
         <F.FormLabel htmlFor="amount">
           <input
             id="amount"
-            type="number"
             placeholder="Amount"
-            {...register('amount', { required: E.REQUIRED })}
+            {...register('amount', { required: E.REQUIRED, min: 0.000000001 })}
           />
           <span className="field-text">Amount</span>
           <ErrorMessage
@@ -148,7 +149,7 @@ const AddTransactionForm: React.FC = () => {
             placeholder="PricePerUnit"
             {...register('price_per_unit', { required: E.REQUIRED })}
           />
-          <span className="field-text">Price per unit</span>
+          <span className="field-text">Price per unit ($)</span>
           <ErrorMessage
             errors={errors}
             name="price-per-unit"

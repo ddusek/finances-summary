@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<SignInInputs> = async (data) => {
     clearErrors();
-    const dataBody: UserLoginBody = mapUserLogin(data);
+    const dataBody = mapUserLogin(data);
     await UserLogin(dataBody)
       .then((res) => {
         localStorage.setItem('token', res.data.token);

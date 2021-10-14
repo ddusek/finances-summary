@@ -75,7 +75,7 @@ const SignUp: React.FC = () => {
       return;
     }
     clearErrors();
-    const dataBody: UserRegisterBody = mapUserRegister(data);
+    const dataBody = mapUserRegister(data);
     await UserRegister(dataBody)
       .then(() => {
         setFormMsg({ type: 'success', msg: E.REGISTERED_SUCCESSFULLY });

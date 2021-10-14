@@ -15,5 +15,6 @@ export interface AddTransactionInputs {
   record_type: 'BUY' | 'SELL';
   symbol: string;
   amount: number;
+  fee: number;
   price_per_unit: number;
 }

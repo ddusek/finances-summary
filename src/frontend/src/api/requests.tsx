@@ -39,6 +39,6 @@ export const UserVerify = async (): Promise<
 export const AddTransactionReq = async (
   data: AddTransactionBody
 ): Promise<AxiosResponse<AddTransactionBody>> => {
-  const response = api.post('/transaction/add');
+  const response = api.post('/transaction/add', data);
   return response;
 };

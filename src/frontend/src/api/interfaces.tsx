@@ -32,7 +32,7 @@ export interface UserVerifyResponse {
 }
 
 export interface AddTransactionBody {
-  date: Date;
+  date: string;
   record_type: 'BUY' | 'SELL';
   symbol: string;
   amount: number;

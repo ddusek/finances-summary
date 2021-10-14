@@ -1,23 +1,25 @@
 from decimal import Decimal
 from datetime import datetime
 from bson import ObjectId
-from mongoengine.errors import NotUniqueError, OperationError, ValidationError
+from mongoengine.errors import OperationError, ValidationError
 from starlette.responses import Response, JSONResponse
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND,
-                              HTTP_422_UNPROCESSABLE_ENTITY,
+from starlette.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST,
+                              HTTP_404_NOT_FOUND, HTTP_422_UNPROCESSABLE_ENTITY,
                               HTTP_500_INTERNAL_SERVER_ERROR)
+from finances_summary.logger import LOGGER
 from finances_summary.models.mongo.user_transactions import (
     TransactionType,
     UserTransactions,
 )
-from finances_summary.logger import LOGGER
+from finances_summary.services.user import get_current_user_id
 
 
 def add(date: datetime, record_type: TransactionType, symbol: str, amount: Decimal,
-        price_per_unit: Decimal) -> Response:
+        fee: Decimal, price_per_unit: Decimal) -> Response:
     """Add a new transaction.
     """
     user_transaction = UserTransactions(
+        user=get_current_user_id(),
         date=date,
         record_type=record_type,
         symbol=symbol,

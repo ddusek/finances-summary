@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional
 from starlette.requests import Request
 
-request_: Union[Request, None] = None
+request_: Optional[Request] = None

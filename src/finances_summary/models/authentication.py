@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from finances_summary.models.base import BaseResponse
-from bson import ObjectId
 
 
 @dataclass
@@ -8,7 +7,7 @@ class JwtUserModel:
     """JWT data of logged in user.
     """
     username: str
-    user_id: ObjectId
+    user_id: str
     expiration: str = ''
 
 

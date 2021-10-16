@@ -81,9 +81,11 @@ def register(username: str, password: str, email: str) -> Response:
         return JSONResponse(reg_response.as_dict(), status_code=HTTP_409_CONFLICT)
     try:
         pwd_hasher = PasswordHasher()
-        user = Users().create_new(username, email, pwd_hasher.hash(password))
+        hashed_pwd = pwd_hasher.hash(password)
+        user = Users().create_new(username, email, hashed_pwd)
         user.save()
-        token = _generate_token(JwtUserModel(username, user.id))
+        jwt_user = JwtUserModel(username, str(user.id))
+        token = _generate_token(jwt_user)
         # Success response.
         reg_response = RegistrationResponse(token=token,
                                             _id=str(user.id),
@@ -117,7 +119,7 @@ def login(login: str, password: str) -> Response:
                 'username': user.username,
             })
             response.set_cookie('token',
-                                _generate_token(JwtUserModel(login, user.id)),
+                                _generate_token(JwtUserModel(login, str(user.id))),
                                 expires=60 * 60 * 24 * 365,
                                 samesite='none',
                                 secure=True)

@@ -131,7 +131,8 @@ const AddTransactionForm: React.FC = () => {
             id="fee"
             type="number"
             placeholder="Fee"
-            {...register('fee', { required: E.REQUIRED })}
+            step="any"
+            {...register('fee', { required: E.REQUIRED, min: 0.00, value: 0 })}
           />
           <span className="field-text">Fee</span>
           <ErrorMessage
@@ -147,6 +148,7 @@ const AddTransactionForm: React.FC = () => {
             id="price-per-unit"
             type="number"
             placeholder="PricePerUnit"
+            step="any"
             {...register('price_per_unit', { required: E.REQUIRED })}
           />
           <span className="field-text">Price per unit ($)</span>

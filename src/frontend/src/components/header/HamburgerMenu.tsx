@@ -11,9 +11,10 @@ const Menu = styled.div`
 export const HamburgerMenu = (props: { items: MenuItem[] }) => {
   return (
     <Menu>
-      {props.items.map((item) => {
+      {props.items.map((item, i) => {
         return (
           <HamburgerMenuItem
+            key={i}
             highlight={item.highlight}
             link={item.link}
             text={item.text}

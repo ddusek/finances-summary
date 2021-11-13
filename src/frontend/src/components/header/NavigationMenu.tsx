@@ -12,9 +12,10 @@ const Menu = styled.nav`
 export const NavigationMenu = (props: { items: MenuItem[] }) => {
   return (
     <Menu>
-      {props.items.map((item) => {
+      {props.items.map((item, i) => {
         return (
           <NavigationMenuItem
+            key={i}
             highlight={item.highlight}
             link={item.link}
             text={item.text}

@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
 `;
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     <Container>
       <Logo />

@@ -36,7 +36,7 @@ const getConflictErr = (data: UserRegisterResponse) => {
   return E.CONFLICT_EMAIL;
 };
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   const {
     register,
     handleSubmit,

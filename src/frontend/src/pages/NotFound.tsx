@@ -6,7 +6,7 @@ const Container = styled.div`
   background-color: ${COLOR_DARK_GREY};
 `;
 
-const NotFound: React.FC = () => {
+const NotFound = () => {
   return (
     <Container>
       <span>Not found</span>

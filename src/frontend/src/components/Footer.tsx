@@ -7,7 +7,7 @@ const Container = styled.div`
   height: 60px;
 `;
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
     <Container>
       <span>footer</span>

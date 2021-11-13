@@ -7,7 +7,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const AddTransaction: React.FC = () => {
+const AddTransaction = () => {
   return (
     <Container>
       <AddTransactionForm />

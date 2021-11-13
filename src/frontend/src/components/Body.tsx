@@ -13,7 +13,7 @@ const Container = styled.div`
   background-color: ${COLOR_DARK_GREY};
 `;
 
-const Body: React.FC = () => {
+const Body = () => {
   return (
     <Container>
       <Switch>

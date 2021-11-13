@@ -27,7 +27,7 @@ const HighlightItem = (props: MenuItem) => {
   );
 };
 
-export const HamburgerMenuItem: React.FC<MenuItem> = (
+export const HamburgerMenuItem = (
   props: MenuItem
 ) => {
   return props.highlight ? HighlightItem(props) : Item(props);

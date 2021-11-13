@@ -16,7 +16,7 @@ interface FormMessage {
   msg?: string;
 }
 
-const AddTransactionForm: React.FC = () => {
+const AddTransactionForm = () => {
   const {
     register,
     handleSubmit,

@@ -6,7 +6,7 @@ const Container = styled.div`
   background-color: ${COLOR_DARK_GREY};
 `;
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
     <Container>
       <span>home</span>

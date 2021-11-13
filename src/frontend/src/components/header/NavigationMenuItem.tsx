@@ -40,7 +40,7 @@ const Highlight = styled(Normal)`
   font-weight: 500;
 `;
 
-const HighlightItem: React.FC<MenuItem> = (
+const HighlightItem = (
   props: MenuItem
 ) => {
   return (
@@ -50,7 +50,7 @@ const HighlightItem: React.FC<MenuItem> = (
   );
 };
 
-const NormalItem: React.FC<MenuItem> = (
+const NormalItem = (
   props: MenuItem
 ) => {
   return (
@@ -60,7 +60,7 @@ const NormalItem: React.FC<MenuItem> = (
   );
 };
 
-const NavigationMenuItem: React.FC<MenuItem> = (
+const NavigationMenuItem = (
   props: MenuItem
 ) => {
   return (

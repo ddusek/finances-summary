@@ -8,7 +8,7 @@ const Container = styled.div`
   margin-right: auto;
 `;
 
-const Logo: React.FC = () => {
+const Logo = () => {
   return (
     <Container>
       <Link to="/">Finances summary</Link>

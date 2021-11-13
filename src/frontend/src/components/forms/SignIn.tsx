@@ -15,7 +15,7 @@ interface FormMessage {
   msg?: string;
 }
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
   const {
     register,
     handleSubmit,

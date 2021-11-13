@@ -7,7 +7,7 @@ const Container = styled.div`
   background-color: ${COLOR_DARK_GREY};
 `
 
-const TransactionsHistoryPage: React.FC = () => {
+const TransactionsHistoryPage = () => {
   return (
     <Container>
       <TransactionsHistory></TransactionsHistory>

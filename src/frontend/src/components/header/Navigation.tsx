@@ -6,7 +6,7 @@ import { MenuItem } from '../../interfaces';
 import { Hamburger } from './Hamburger';
 import { NavigationMenu } from './NavigationMenu';
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
   const responsivity = useContext(ResponsivityContext);
   const user = useContext(UserContext);
 

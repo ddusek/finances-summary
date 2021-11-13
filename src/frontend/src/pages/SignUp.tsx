@@ -7,7 +7,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   return (
     <Container>
       <Form />

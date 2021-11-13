@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App: React.FC = () => {
+const App = () => {
   const [user, setUser] = useState<User>(initialUser);
   const responsivity: Responsivity = {
     isMobile: useMediaQuery({ maxWidth: 719 }),

@@ -86,7 +86,7 @@ const Item = styled.td`
   }
 `;
 
-const TransactionsHistory: React.FC = () => {
+const TransactionsHistory = () => {
   const transactions: Transaction[] = [
     {
       date: new Date(),

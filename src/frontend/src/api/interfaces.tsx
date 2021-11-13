@@ -36,6 +36,6 @@ export interface AddTransactionBody {
   record_type: 'BUY' | 'SELL';
   symbol: string;
   amount: number;
-  fee: number;
+  fee?: number;
   price_per_unit: number;
 }

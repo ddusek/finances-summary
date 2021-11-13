@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { MenuItem } from '../../interfaces';
 import { COLOR_TEAL } from '../../utils/cssConstants';
 
 const Container = styled.ul`
@@ -39,24 +40,18 @@ const Highlight = styled(Normal)`
   font-weight: 500;
 `;
 
-export interface NavigationItemProps {
-  link: string;
-  text: string;
-  highlight?: boolean;
-}
-
-const HighlightItem: React.FC<NavigationItemProps> = (
-  props: NavigationItemProps
+const HighlightItem: React.FC<MenuItem> = (
+  props: MenuItem
 ) => {
   return (
-    <Highlight>
+    <Highlight> 
       <Link to={props.link}>{props.text}</Link>
     </Highlight>
   );
 };
 
-const NormalItem: React.FC<NavigationItemProps> = (
-  props: NavigationItemProps
+const NormalItem: React.FC<MenuItem> = (
+  props: MenuItem
 ) => {
   return (
     <Normal>
@@ -65,8 +60,8 @@ const NormalItem: React.FC<NavigationItemProps> = (
   );
 };
 
-const NavigationItem: React.FC<NavigationItemProps> = (
-  props: NavigationItemProps
+const NavigationMenuItem: React.FC<MenuItem> = (
+  props: MenuItem
 ) => {
   return (
     <Container>
@@ -75,4 +70,4 @@ const NavigationItem: React.FC<NavigationItemProps> = (
   );
 };
 
-export default NavigationItem;
+export default NavigationMenuItem;

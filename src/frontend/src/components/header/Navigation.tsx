@@ -1,25 +1,37 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { UserContext } from '../../context/user';
-import NavigationItem from './NavigationItem';
-
-const Container = styled.nav`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
+import { ResponsivityContext } from '../../context/Responsivity';
+import { UserContext } from '../../context/User';
+import { MenuItem } from '../../interfaces';
+import { Hamburger } from './Hamburger';
+import { NavigationMenu } from './NavigationMenu';
 
 const Navigation: React.FC = () => {
+  const responsivity = useContext(ResponsivityContext);
   const user = useContext(UserContext);
-  return (
-    <Container>
-      <NavigationItem link="/global-stocks" text="Global stocks" />
-      {user.loggedIn && <NavigationItem link="/my-stocks" text="My stocks" />}
-      {!user.loggedIn && (
-        <NavigationItem link="/sign-up" text="Sign up" highlight />
-      )}
-    </Container>
-  );
+
+  const getItems = () => {
+    let items: MenuItem[] = [
+      { link: '/global-stocks', text: 'Global stocks', highlight: false },
+    ];
+    user.loggedIn &&
+      items.push({ link: '/my-stocks', text: 'My stocks', highlight: false });
+    !user.loggedIn &&
+      items.push({ link: '/sign-up', text: 'Sign up', highlight: true });
+    user.loggedIn &&
+      items.push({
+        link: '/list-commodities',
+        text: 'List commodities',
+        highlight: false,
+      });
+    return items;
+  };
+
+  const items = getItems();
+  if (responsivity.isMobile) {
+    return <Hamburger items={items} />;
+  }
+  return <NavigationMenu items={items} />;
 };
 
 export default Navigation;

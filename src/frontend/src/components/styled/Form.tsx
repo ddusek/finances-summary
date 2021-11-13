@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {
   COLOR_DARK,
   COLOR_TEAL,
-  COLOR_LIGHT_GREY,
+  COLOR_FONT,
   COLOR_TEAL_DARK,
   COLOR_TEAL_VERY_DARK,
   COLOR_RED,
@@ -28,7 +28,7 @@ const Form = styled.form`
     color: black;
     line-height: 40px;
     font-size: ${FONT_SIZE_NORMAL};
-    background-color: ${COLOR_LIGHT_GREY};
+    background-color: ${COLOR_FONT};
     border-radius: 20px;
     &:hover {
       background-color: ${COLOR_TEAL};
@@ -44,7 +44,7 @@ const Form = styled.form`
     width: calc(100% - 76px);
     padding: 5px 35px 5px 5px;
     font-size: ${FONT_SIZE_NORMAL};
-    color: ${COLOR_LIGHT_GREY};
+    color: ${COLOR_FONT};
     border: none;
     background-color: ${COLOR_TEAL_VERY_DARK};
     background-image: url('/arrow-down.svg');
@@ -130,7 +130,7 @@ const SubmitButton = styled.input`
   margin: 10px 20px 20px 20px;
   height: 40px;
   width: 230px;
-  background-color: ${COLOR_LIGHT_GREY};
+  background-color: ${COLOR_FONT};
   font-size: ${FONT_SIZE_NORMAL};
   border-radius: 20px;
   &:hover {

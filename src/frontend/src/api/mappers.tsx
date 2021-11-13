@@ -1,4 +1,4 @@
-import { SignUpInputs, SignInInputs, AddTransactionInputs } from '../interfaces';
+import { SignUpInputs, SignInInputs, Transaction } from '../interfaces';
 import { UserRegisterBody, UserLoginBody, AddTransactionBody } from './interfaces';
 
 export const mapUserRegister = (source: SignUpInputs): UserRegisterBody => {
@@ -13,7 +13,7 @@ export const mapUserLogin = (source: SignInInputs): UserLoginBody => {
   return source as UserLoginBody;
 };
 
-export const mapAddTransaction = (source: AddTransactionInputs): AddTransactionBody => {
+export const mapAddTransaction = (source: Transaction): AddTransactionBody => {
   return {
     date: source.date.toLocaleDateString(),
     amount: source.amount,

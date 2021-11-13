@@ -4,7 +4,7 @@ import ReactDatePicker from 'react-datepicker';
 import { ErrorMessage } from '@hookform/error-message';
 import { AddTransactionReq } from '../../api/requests';
 import { AddTransactionBody } from '../../api/interfaces';
-import { AddTransactionInputs } from '../../interfaces';
+import { Transaction } from '../../interfaces';
 import * as F from '../styled/Form';
 import * as E from './constants';
 import { AxiosError } from 'axios';
@@ -22,7 +22,7 @@ const AddTransactionForm: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AddTransactionInputs>({ criteriaMode: 'all' });
+  } = useForm<Transaction>({ criteriaMode: 'all' });
 
   const [formMsg, setFormMsg] = useState<FormMessage>();
 
@@ -30,7 +30,7 @@ const AddTransactionForm: React.FC = () => {
     setFormMsg({ type: 'empty' });
   };
 
-  const onSubmit: SubmitHandler<AddTransactionInputs> = async (data) => {
+  const onSubmit: SubmitHandler<Transaction> = async (data) => {
     clearErrors();
     const dataBody = mapAddTransaction(data);
     await AddTransactionReq(dataBody)

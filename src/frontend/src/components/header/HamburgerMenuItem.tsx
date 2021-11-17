@@ -3,12 +3,10 @@ import styled from 'styled-components';
 import { MenuItem } from '../../interfaces';
 
 const Normal = styled.span`
-  width: 200px;
-  height: 50px;
+    padding: 0.8em 0;
 `;
-const Highlight = styled.span`
-  width: 200px;
-  height: 50px;
+const Highlight = styled(Normal)`
+  font-weight: 500;
 `;
 
 const Item = (props: MenuItem) => {

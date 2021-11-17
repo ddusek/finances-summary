@@ -1,11 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MenuItem } from '../../interfaces';
+import { COLOR_DARK } from '../../utils/cssConstants';
 import { HamburgerMenuItem } from './HamburgerMenuItem';
 
 const Menu = styled.div`
-  width: 200px;
-  height: 300px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: ${COLOR_DARK};
+  top: 60px;
+  right: 0;
+  padding: 10px 20px;
+  border-radius: 0 0 0 5px;
+  z-index: 100;
 `;
 
 export const HamburgerMenu = (props: { items: MenuItem[] }) => {

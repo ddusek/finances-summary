@@ -1,17 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
 import Form from '../components/forms/SignIn';
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import * as S from './styled/PageStyles';
 
 const SignIn = () => {
   return (
-    <Container>
+    <S.BaseContainer>
       <Form />
-    </Container>
+    </S.BaseContainer>
   );
 };
 

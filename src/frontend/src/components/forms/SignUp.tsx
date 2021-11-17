@@ -97,7 +97,7 @@ const SignUp = () => {
   };
 
   return (
-    <div>
+    <F.Container>
       <F.HeaderContainer>
         <F.Header>Sign up</F.Header>
       </F.HeaderContainer>
@@ -205,7 +205,7 @@ const SignUp = () => {
           </F.ButtonContainer>
         </F.Buttons>
       </F.Form>
-    </div>
+    </F.Container>
   );
 };
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import TransactionsHistory from '../components/TransactionsHistory';
 import { COLOR_DARK_GREY } from '../utils/cssConstants';
@@ -10,7 +9,7 @@ const Container = styled.div`
 const TransactionsHistoryPage = () => {
   return (
     <Container>
-      <TransactionsHistory></TransactionsHistory>
+      <TransactionsHistory />
     </Container>
   )
 }

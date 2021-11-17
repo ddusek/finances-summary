@@ -9,6 +9,7 @@ import { mapUserLogin } from '../../api/mappers';
 import * as F from '../styled/Form';
 import * as E from './constants';
 import { AxiosError } from 'axios';
+import styled from 'styled-components';
 
 interface FormMessage {
   type: 'error' | 'success' | 'empty';
@@ -49,7 +50,7 @@ const SignIn = () => {
   };
 
   return (
-    <div>
+    <F.Container>
       <F.HeaderContainer>
         <F.Header>Sign up</F.Header>
       </F.HeaderContainer>
@@ -106,7 +107,7 @@ const SignIn = () => {
           </F.ButtonContainer>
         </F.Buttons>
       </F.Form>
-    </div>
+    </F.Container>
   );
 };
 

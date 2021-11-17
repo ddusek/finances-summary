@@ -10,6 +10,7 @@ import * as E from './constants';
 import { AxiosError } from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
 import { mapAddTransaction } from '../../api/mappers';
+import styled from 'styled-components';
 
 interface FormMessage {
   type: 'error' | 'success' | 'empty';
@@ -50,7 +51,7 @@ const AddTransactionForm = () => {
   };
 
   return (
-    <div>
+    <F.Container>
       <F.HeaderContainer>
         <F.Header>New transaction</F.Header>
       </F.HeaderContainer>
@@ -172,7 +173,7 @@ const AddTransactionForm = () => {
           </F.ButtonContainer>
         </F.Buttons>
       </F.Form>
-    </div>
+    </F.Container>
   );
 };
 

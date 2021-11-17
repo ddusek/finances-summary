@@ -1,21 +1,20 @@
 import styled from 'styled-components';
-import {
-  COLOR_DARK,
-  COLOR_TEAL,
-  COLOR_FONT,
-  COLOR_TEAL_DARK,
-  COLOR_TEAL_VERY_DARK,
-  COLOR_RED,
-  FONT_SIZE_NORMAL,
-  COLOR_WHITE,
-} from '../../utils/cssConstants';
+import * as C from '../../utils/cssConstants';
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const Form = styled.form`
-  width: 600px;
-  margin: 0 10px;
+  width: 100%;
+  max-width: 600px;
+  overflow:hidden;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  background-color: ${COLOR_TEAL_DARK};
+  background-color: ${C.COLOR_TEAL_DARK};
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -24,14 +23,15 @@ const Form = styled.form`
     border: none;
     margin: 10px 20px 20px 20px;
     height: 40px;
-    width: 230px;
-    color: black;
+    max-width: 230px;
+    width: 100%;
+    color: ${C.COLOR_DARK};
     line-height: 40px;
-    font-size: ${FONT_SIZE_NORMAL};
-    background-color: ${COLOR_FONT};
+    font-size: ${C.FONT_SIZE_NORMAL};
+    background-color: ${C.COLOR_FONT};
     border-radius: 20px;
     &:hover {
-      background-color: ${COLOR_TEAL};
+      background-color: ${C.COLOR_TEAL};
     }
   }
 
@@ -43,10 +43,10 @@ const Form = styled.form`
     margin: 20px 20px 0 20px;
     width: calc(100% - 76px);
     padding: 5px 35px 5px 5px;
-    font-size: ${FONT_SIZE_NORMAL};
-    color: ${COLOR_FONT};
+    font-size: ${C.FONT_SIZE_NORMAL};
+    color: ${C.COLOR_FONT};
     border: none;
-    background-color: ${COLOR_TEAL_VERY_DARK};
+    background-color: ${C.COLOR_TEAL_VERY_DARK};
     background-image: url('/arrow-down.svg');
     background-size: 28px;
     background-position-x: 98%;
@@ -59,15 +59,15 @@ const Form = styled.form`
   .field-error {
     position: absolute;
     top: 25px;
-    color: ${COLOR_RED};
+    color: ${C.COLOR_RED};
     top: 30px;
     width: 150px;
     left: 405px;
-    font-size: ${FONT_SIZE_NORMAL};
+    font-size: ${C.FONT_SIZE_NORMAL};
   }
 
   .field-border-error {
-    border: 1px ${COLOR_RED} solid;
+    border: 1px ${C.COLOR_RED} solid;
   }
 `;
 
@@ -83,7 +83,7 @@ const FormLabel = styled.label`
     margin: 20px 20px 0 20px;
     border: none;
     outline: none;
-    background-color: ${COLOR_TEAL_VERY_DARK};
+    background-color: ${C.COLOR_TEAL_VERY_DARK};
     border-radius: 10px;
     &::placeholder {
       opacity: 0;
@@ -103,12 +103,12 @@ const FormLabel = styled.label`
     top: 0;
     left: 45px;
     transform: translateY(30px);
-    font-size: ${FONT_SIZE_NORMAL};
+    font-size: ${C.FONT_SIZE_NORMAL};
     transition-duration: 300ms;
   }
   :focus-within > span.field-text,
   input:not(:placeholder-shown) + span {
-    color: ${COLOR_TEAL};
+    color: ${C.COLOR_TEAL};
     transform: translateY(0px);
   }
 `;
@@ -116,11 +116,17 @@ const FormLabel = styled.label`
 const Buttons = styled.div`
   display: flex;
   margin-top: 20px;
+  @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+    flex-direction: column;
+  }
 `;
 
 const ButtonContainer = styled.span`
   display: flex;
-  margin: auto auto 0 auto;
+  @media only screen and (min-width: ${C.MIN_TABLET_RES}px) {
+    margin: auto;
+    width: 230px;
+  }
   flex-direction: column;
   align-items: center;
 `;
@@ -129,26 +135,28 @@ const SubmitButton = styled.input`
   border: none;
   margin: 10px 20px 20px 20px;
   height: 40px;
-  width: 230px;
-  background-color: ${COLOR_FONT};
-  font-size: ${FONT_SIZE_NORMAL};
+  max-width: 230px;
+  width: 100%;
+  background-color: ${C.COLOR_FONT};
+  font-size: ${C.FONT_SIZE_NORMAL};
   border-radius: 20px;
   &:hover {
-    background-color: ${COLOR_TEAL};
+    background-color: ${C.COLOR_TEAL};
     cursor: pointer;
   }
 `;
 
 const ButtonText = styled.span`
-  width: 200px;
-  height: 36px;
+  max-width: 200px;
+  width: 100%;
+  min-height: 18px;
 
   &.submit-error {
-    color: ${COLOR_RED};
+    color: ${C.COLOR_RED};
   }
 
   &.submit-success {
-    color: ${COLOR_TEAL};
+    color: ${C.COLOR_TEAL};
   }
 `;
 
@@ -159,15 +167,18 @@ const Header = styled.h2`
 
 const HeaderContainer = styled.span`
   display: flex;
-  width: 600px;
-  height: 60px;
-  margin: 10px 10px 0 10px;
+  max-width: 600px;
+  width: 100%;
+  min-height: 60px;
+  height: auto;
+  overflow:hidden;
   border-radius: 10px;
-  background-color: ${COLOR_DARK};
+  background-color: ${C.COLOR_DARK};
   border-radius: 10px 10px 0 0;
 `;
 
 export {
+  Container,
   Form,
   FormLabel,
   SubmitButton,

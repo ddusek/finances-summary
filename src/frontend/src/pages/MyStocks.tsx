@@ -1,17 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
 import AddTransactionForm from '../components/forms/AddTransaction';
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import * as S from './styled/PageStyles';
 
 const AddTransaction = () => {
   return (
-    <Container>
+    <S.BaseContainer>
       <AddTransactionForm />
-    </Container>
+    </S.BaseContainer>
   );
 };
 

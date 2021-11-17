@@ -12,4 +12,5 @@ export const COLOR_RED = '#ff0055';
 export const FONT_SIZE_NORMAL = '16px';
 export const FONT_SIZE_BIG = '22px';
 
-export const MAX_SMALL_SCREEN = '700px';
+export const MIN_TABLET_RES = 700;
+export const MIN_DESKTOP_RES = 1280;

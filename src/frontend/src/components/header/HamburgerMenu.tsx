@@ -9,7 +9,7 @@ const Menu = styled.div`
   flex-direction: column;
   position: absolute;
   background-color: ${COLOR_DARK};
-  top: 60px;
+  top: 59px;
   right: 0;
   padding: 10px 20px;
   border-radius: 0 0 0 5px;

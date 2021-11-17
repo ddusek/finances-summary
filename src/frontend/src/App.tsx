@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { createGlobalStyle } from 'styled-components';
-import { COLOR_FONT, COLOR_TEAL, COLOR_DARK_GREY } from './utils/cssConstants';
+import * as C from './utils/cssConstants';
 import Header from './components/header/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
@@ -13,8 +13,8 @@ import { UserVerify } from './api/requests';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
-    color: ${COLOR_FONT};
-    background-color: ${COLOR_DARK_GREY};
+    color: ${C.COLOR_FONT};
+    background-color: ${C.COLOR_DARK_GREY};
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
   a {
-    color: ${COLOR_TEAL};
+    color: ${C.COLOR_TEAL};
     text-decoration: none;
   }
   ul {
@@ -34,9 +34,9 @@ const GlobalStyle = createGlobalStyle`
 const App = () => {
   const [user, setUser] = useState<User>(initialUser);
   const responsivity: Responsivity = {
-    isMobile: useMediaQuery({ maxWidth: 719 }),
-    isTablet: useMediaQuery({ minWidth: 720, maxWidth: 1279 }),
-    isDesktop: useMediaQuery({ minWidth: 1280 }),
+    isMobile: useMediaQuery({ maxWidth: C.MIN_TABLET_RES-1 }),
+    isTablet: useMediaQuery({ minWidth: C.MIN_TABLET_RES, maxWidth: C.MIN_DESKTOP_RES-1 }),
+    isDesktop: useMediaQuery({ minWidth: C.MIN_DESKTOP_RES }),
   };
   useEffect(() => {
     UserVerify()

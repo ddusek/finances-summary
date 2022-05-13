@@ -54,6 +54,10 @@ const Form = styled.form`
     background-repeat: no-repeat;
     border-radius: 10px;
     height: 37px;
+    @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+      width: calc(100% - 16px);
+      margin: 10px 10px 0 10px;
+    }
   }
 
   .field-error {
@@ -64,6 +68,10 @@ const Form = styled.form`
     width: 150px;
     left: 405px;
     font-size: ${C.FONT_SIZE_NORMAL};
+    @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+      top: -10px;
+      right: 15px;
+    }
   }
 
   .field-border-error {
@@ -93,6 +101,10 @@ const FormLabel = styled.label`
       -webkit-appearance: none;
       margin: 0;
     }
+    @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+      width: calc(100% - 20px);
+      margin: 10px 10px 0 10px;
+    }
 
     &[type='number'] {
       -moz-appearance: textfield;
@@ -105,6 +117,10 @@ const FormLabel = styled.label`
     transform: translateY(30px);
     font-size: ${C.FONT_SIZE_NORMAL};
     transition-duration: 300ms;
+    @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+      left: 25px;
+      top: -10px;
+    }
   }
   :focus-within > span.field-text,
   input:not(:placeholder-shown) + span {
@@ -163,6 +179,9 @@ const ButtonText = styled.span`
 const Header = styled.h2`
   font-size: 30px;
   margin: 10px 0 0 40px;
+  @media only screen and (max-width: ${C.MIN_TABLET_RES-1}px) {
+    margin: 10px 0 0 10px;
+  }
 `;
 
 const HeaderContainer = styled.span`

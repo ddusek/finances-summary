@@ -1,14 +1,18 @@
+import Cookies from 'js-cookie';
+import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { createGlobalStyle } from 'styled-components';
+
 import * as C from './utils/cssConstants';
 import Header from './components/header/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
+import { UserVerify } from './api/requests';
 import { UserContext, initialUser, User } from './context/User';
 import { ResponsivityContext, Responsivity } from './context/Responsivity';
-import { UserVerify } from './api/requests';
+import { JwtPayload } from './interfaces';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -42,8 +46,11 @@ const App = () => {
     UserVerify()
       .then((res) => {
         if (res.data.authorized) {
-          setUser({ loggedIn: true, username: 'todo' });
-          console.log('token');
+          const token = Cookies.get('token');
+          if (token) {
+            const jwtPayload:JwtPayload = jwt_decode(token);
+            setUser({ loggedIn: true, username: jwtPayload.username });
+          }
         } else {
           setUser({ loggedIn: false, username: '' });
           console.log('no token');

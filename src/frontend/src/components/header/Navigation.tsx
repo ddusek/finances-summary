@@ -6,7 +6,7 @@ import { MenuItem } from '../../interfaces';
 import { Hamburger } from './Hamburger';
 import { NavigationMenu } from './NavigationMenu';
 
-const Navigation = () => {
+export const Navigation = () => {
   const responsivity = useContext(ResponsivityContext);
   const user = useContext(UserContext);
 
@@ -33,5 +33,3 @@ const Navigation = () => {
   }
   return <NavigationMenu items={items} />;
 };
-
-export default Navigation;

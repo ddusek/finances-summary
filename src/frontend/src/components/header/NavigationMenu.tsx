@@ -1,7 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { MenuItem } from '../../interfaces';
-import NavigationMenuItem from './NavigationMenuItem';
+import { NavigationMenuItem } from './NavigationMenuItem';
+import { NavigationUser } from './NavigationUser';
 
 const Menu = styled.nav`
   display: flex;
@@ -22,6 +22,7 @@ export const NavigationMenu = (props: { items: MenuItem[] }) => {
           />
         );
       })}
+      <NavigationUser />
     </Menu>
   );
 };

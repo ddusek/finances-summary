@@ -1,8 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
 import { MenuItem } from '../../interfaces';
 import { COLOR_DARK } from '../../utils/cssConstants';
 import { HamburgerMenuItem } from './HamburgerMenuItem';
+import { NavigationUser } from './NavigationUser';
 
 const Menu = styled.div`
   display: flex;
@@ -29,6 +29,7 @@ export const HamburgerMenu = (props: { items: MenuItem[] }) => {
           />
         );
       })}
+      <NavigationUser />
     </Menu>
   );
 };

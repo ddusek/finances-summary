@@ -60,7 +60,7 @@ const NormalItem = (
   );
 };
 
-const NavigationMenuItem = (
+export const NavigationMenuItem = (
   props: MenuItem
 ) => {
   return (
@@ -69,5 +69,3 @@ const NavigationMenuItem = (
     </Container>
   );
 };
-
-export default NavigationMenuItem;

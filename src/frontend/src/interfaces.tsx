@@ -28,3 +28,9 @@ export interface Transaction {
   change_number_sale: number;
   change_percent_sale: number;
 }
+
+export interface JwtPayload {
+  username: string;
+  user_id: string;
+  expiration: string;
+}

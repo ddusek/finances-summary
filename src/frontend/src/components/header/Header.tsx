@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLOR_DARK } from '../../utils/cssConstants';
-import Navigation from './Navigation';
+import { Navigation } from './Navigation';
 import Logo from './Logo';
 
 const Container = styled.div`

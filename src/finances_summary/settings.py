@@ -20,10 +20,6 @@ MONGO_CONN_URI = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
     MONGO_HOSTNAME,
     MONGO_DATABASE
 )
-# MongoClient connection.
-# MONGO: MongoClient = MongoClient(_mongo_conn_uri,
-#                                  serverSelectionTimeoutMS=3000)[MONGO_DATABASE]
-
 
 # Starlette.
 ALLOWED_ORIGINS: list[str] = config('ALLOWED_ORIGINS', cast=CommaSeparatedStrings)

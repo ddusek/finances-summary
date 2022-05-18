@@ -10,4 +10,5 @@ FE is written in React with typescript.
 ```
 docker-compose --file docker-compose-dev.yaml up --build
 ```
-dev project url: https://0.0.0.0:3000/
+dev project url: https://0.0.0.0:3000/  
+dev database: 0.0.0.0:27017

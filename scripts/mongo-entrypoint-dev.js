@@ -1,7 +1,9 @@
 // Create Collections.
 db.createCollection("users")
-db.createCollection("userTransactions")
+db.createCollection("user_transactions")
 db.createCollection("commodities")
+db.createCollection("commodity_prices")
+db.createCollection("commodity_statuses")
 
 // Create indexes.
 db.users.createIndex( { email: -1})

@@ -17,7 +17,7 @@ class UserTransactions(Document):
     record_type = StringField(choices=[
         TransactionType.BUY.name, TransactionType.SELL.name
     ],
-                              required=True)
+        required=True)
     symbol = StringField(required=True)
     amount = DecimalField(precision=9, required=True)
     price_per_unit = DecimalField(precision=9, required=True)

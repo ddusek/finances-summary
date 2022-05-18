@@ -13,3 +13,4 @@ uvicorn
 itsdangerous
 pyjwt
 argon2-cffi
+yfinance

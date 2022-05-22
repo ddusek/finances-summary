@@ -1,14 +1,6 @@
 from bson import ObjectId
-from finances_summary.services.authentication import decode_token
-import finances_summary
-
-
-def get_user_token() -> str:
-    print(finances_summary.request_)
-    if finances_summary.request_:
-        cookies = finances_summary.request_.cookies
-        return cookies['token'] if 'token' in cookies else ''
-    return ''
+from finances_summary.services.jwt_service import decode_token
+from finances_summary.services.cookies import get_user_token
 
 
 def get_current_user_id(as_string=True) -> str:

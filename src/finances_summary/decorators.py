@@ -8,6 +8,6 @@ def bind_request(func):
     """
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
-        finances_summary.request_ = args[0]
+        finances_summary.current_request = args[0]
         return await func(*args, **kwargs)
     return wrapper

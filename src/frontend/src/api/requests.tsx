@@ -6,6 +6,7 @@ import {
   UserLoginResponse,
   UserVerifyResponse,
   AddTransactionBody,
+  GetTransactionsResponse,
 } from './interfaces';
 import { AxiosResponse } from 'axios';
 
@@ -40,5 +41,14 @@ export const AddTransactionReq = async (
   data: AddTransactionBody
 ): Promise<AxiosResponse<AddTransactionBody>> => {
   const response = api.post('/transaction/add', data);
+  return response;
+};
+
+export const GetTransactions = async (
+  queryString: string
+): Promise<AxiosResponse<GetTransactionsResponse>> => {
+  const response = api.get<GetTransactionsResponse>(
+    `/transaction/list${queryString}`
+  );
   return response;
 };

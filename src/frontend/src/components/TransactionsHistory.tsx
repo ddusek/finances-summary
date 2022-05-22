@@ -10,6 +10,7 @@ import {
   COLOR_DARK_GREY,
 } from '../utils/cssConstants';
 import { Transaction } from '../interfaces';
+import { GetTransactions } from '../api/requests';
 
 const Container = styled.div`
   background-color: ${COLOR_DARK_GREY};
@@ -86,7 +87,14 @@ const Item = styled.td`
   }
 `;
 
+const call = async () => {
+  const someting = await GetTransactions('?type=buy&symbol=btc');
+  console.log(someting)
+  return someting;
+}
+
 const TransactionsHistory = () => {
+  call();
   const transactions: Transaction[] = [
     {
       date: new Date(),

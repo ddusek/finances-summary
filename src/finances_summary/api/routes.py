@@ -1,6 +1,6 @@
 from starlette.routing import Route, Mount
 from finances_summary.api.endpoints import (
-    register_user, login_user, verify_user_token, add_transaction, list_transactions,
+    register_user, login_user, is_authenticated, add_transaction, list_transactions,
     remove_transaction, user_summary_total, user_summary_symbol)
 
 
@@ -10,7 +10,7 @@ def _user_routes() -> list[Route]:
     return [
         Route('/register', register_user, methods=['POST']),
         Route('/login', login_user, methods=['POST']),
-        Route('/verify', verify_user_token, methods=['GET']),
+        Route('/verify', is_authenticated, methods=['GET']),
     ]
 
 

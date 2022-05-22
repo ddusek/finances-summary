@@ -1,6 +1,4 @@
-from typing import Union
-from datetime import datetime, timedelta
-from jwt import encode, decode, DecodeError
+from jwt import decode, DecodeError
 from argon2 import PasswordHasher
 from argon2.exceptions import (HashingError, VerificationError, VerifyMismatchError,
                                InvalidHash)
@@ -12,8 +10,9 @@ from finances_summary.logger import LOGGER
 from finances_summary.models.authentication import (
     JwtUserModel, RegistrationConflict, RegistrationResponse, AuthorizedResponse)
 from finances_summary.models.mongo.users import Users
-from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
-                                       JWT_PUBLIC_KEY_PATH)
+from finances_summary.settings import (JWT_ALGORITHM, JWT_PUBLIC_KEY_PATH)
+from finances_summary.services.jwt_service import generate_token, is_token_valid
+from finances_summary.services.cookies import set_cookie
 
 
 def _is_email(login: str) -> bool:
@@ -33,16 +32,6 @@ def _rehash_password(user: Users, password: str) -> None:
 
     except HashingError as err:
         LOGGER.exception(err)
-
-
-def _generate_token(data: JwtUserModel, expiration: timedelta = timedelta(365)) -> str:
-    """Generate JWT token.
-    """
-    expire = datetime.now() + expiration
-    data.expiration = expire.isoformat()
-    with open(JWT_PRIVATE_KEY_PATH, 'r', encoding='UTF-8') as file:
-        encoded_jwt = encode(data.__dict__, key=file.read(), algorithm=JWT_ALGORITHM)
-        return encoded_jwt
 
 
 def _find_user(login: str) -> Users:
@@ -85,7 +74,7 @@ def register(username: str, password: str, email: str) -> Response:
         user = Users().create_new(username, email, hashed_pwd)
         user.save()
         jwt_user = JwtUserModel(username, str(user.id))
-        token = _generate_token(jwt_user)
+        token = generate_token(jwt_user)
         # Success response.
         reg_response = RegistrationResponse(token=token,
                                             _id=str(user.id),
@@ -118,11 +107,9 @@ def login(login: str, password: str) -> Response:
                 'id': str(user.id),
                 'username': user.username,
             })
-            response.set_cookie('token',
-                                _generate_token(JwtUserModel(login, str(user.id))),
-                                expires=60 * 60 * 24 * 365,
-                                samesite='none',
-                                secure=True)
+            token = generate_token(JwtUserModel(login, str(user.id)))
+            set_cookie(response, 'token', token)
+
             return response
         return Response(status_code=HTTP_401_UNAUTHORIZED)
 
@@ -134,33 +121,9 @@ def login(login: str, password: str) -> Response:
         return Response(status_code=HTTP_401_UNAUTHORIZED)
 
 
-def decode_token(token: str) -> Union[JwtUserModel, None]:
-    if not token:
-        return None
-    with open(JWT_PUBLIC_KEY_PATH, 'r', encoding='UTF-8') as file:
-        try:
-            json_data = decode(token, file.read(), algorithms=[JWT_ALGORITHM])
-            return JwtUserModel(**json_data)
-        except DecodeError:
-            return None
-
-
-def token_valid(token: str) -> bool:
-    """Return True if jwt token is valid.
-    """
-    if not token:
-        return False
-    with open(JWT_PUBLIC_KEY_PATH, 'r', encoding='UTF-8') as file:
-        try:
-            decode(token, file.read(), algorithms=[JWT_ALGORITHM])
-            return True
-        except DecodeError:
-            return False
-
-
-def verify_token(token: str) -> Response:
+def is_user_authenticated(token: str) -> Response:
     """Verify user token.
     """
-    if token_valid(token):
+    if is_token_valid(token):
         return JSONResponse(AuthorizedResponse(True).as_dict())
     return JSONResponse(AuthorizedResponse().as_dict())

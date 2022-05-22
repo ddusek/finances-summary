@@ -38,6 +38,8 @@ def get_historical_data(symbols: list[str]):
             results[symbol] = res
             symbolStatus = CommodityStatuses(symbol=symbol, imported=True)
             symbolStatus.save()
+        else:
+            print(f'skipping import {symbol}')
 
     # print results
     for k, v in results.items():

@@ -1,9 +1,12 @@
 from starlette.responses import Response
 from starlette.requests import Request
 from starlette.authentication import requires
-from finances_summary.services.authentication import register, login, verify_token
+from finances_summary.services.authentication import (register, login,
+                                                      is_user_authenticated)
 from finances_summary.services.transaction import add, remove, list_
 from finances_summary.services.user_summary import total, symbol
+from finances_summary.services.cookies import get_user_token
+from finances_summary.services.jwt_service import decode_token
 from finances_summary.decorators import bind_request
 
 
@@ -24,12 +27,11 @@ async def login_user(request: Request) -> Response:
 
 
 @bind_request
-async def verify_user_token(request: Request) -> Response:
+async def is_authenticated(request: Request) -> Response:
     """Verify user.
     """
-    cookies = request.cookies
-    token: str = cookies['token'] if 'token' in cookies else ''
-    return verify_token(token)
+    token = get_user_token()
+    return is_user_authenticated(token)
 
 
 @bind_request
@@ -55,9 +57,12 @@ async def remove_transaction(request: Request) -> Response:
 async def list_transactions(request: Request) -> Response:
     """List user's transactions.
     """
-    type_ = request.query_params['type']
-    symbol = request.query_params['symbol']
-    return list_(type_, symbol)
+    type_ = request.query_params['type'].upper()
+    symbol = request.query_params['symbol'].upper()
+    token = get_user_token()
+    user = decode_token(token)
+    if (user):
+        return list_(user, type_, symbol)
 
 
 @bind_request

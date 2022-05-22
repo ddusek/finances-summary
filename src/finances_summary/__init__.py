@@ -1,4 +1,5 @@
 from typing import Optional
 from starlette.requests import Request
 
-request_: Optional[Request] = None
+# current starlette Request object
+current_request: Request

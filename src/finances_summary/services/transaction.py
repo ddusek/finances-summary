@@ -11,6 +11,7 @@ from finances_summary.models.mongo.user_transactions import (
     TransactionType,
     UserTransactions,
 )
+from finances_summary.models.authentication import JwtUserModel
 from finances_summary.services.user import get_current_user_id
 
 
@@ -51,7 +52,7 @@ def remove(object_id: ObjectId) -> Response:
     return Response(status_code=HTTP_404_NOT_FOUND)
 
 
-def list_(type_: str = None, symbol: str = None) -> Response:
+def list_(user: JwtUserModel, type_: str = None, symbol: str = None) -> Response:
     """Get list of user's transactions.
     """
     # TODO check if query can be built with multiple calls
@@ -60,11 +61,14 @@ def list_(type_: str = None, symbol: str = None) -> Response:
     query = {}
     if type_ is not None:
         try:
-            query['type'] = TransactionType[type_]
+            query['record_type'] = TransactionType[type_].name
         except KeyError:
             return Response(status_code=HTTP_400_BAD_REQUEST)
     if symbol is not None:
         query['symbol'] = symbol
+    if user is not None:
+        query['user'] = ObjectId(user.user_id)
     # TODO pagination.
-    transactions = UserTransactions.objects(__raw__=query)[:50]
+    test = UserTransactions.objects(**query)
+    transactions = UserTransactions.objects(**query)[:50].to_json()
     return JSONResponse(transactions)

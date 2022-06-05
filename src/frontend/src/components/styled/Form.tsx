@@ -14,7 +14,7 @@ const Form = styled.form`
   overflow:hidden;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  background-color: ${C.COLOR_TEAL_DARK};
+  background-color: ${C.COLOR_COMPONENT_LIGHT};
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -46,7 +46,7 @@ const Form = styled.form`
     font-size: ${C.FONT_SIZE_NORMAL};
     color: ${C.COLOR_FONT};
     border: none;
-    background-color: ${C.COLOR_TEAL_VERY_DARK};
+    background-color: ${C.COLOR_COMPONENT_DARK};
     background-image: url('/arrow-down.svg');
     background-size: 28px;
     background-position-x: 98%;
@@ -91,7 +91,7 @@ const FormLabel = styled.label`
     margin: 20px 20px 0 20px;
     border: none;
     outline: none;
-    background-color: ${C.COLOR_TEAL_VERY_DARK};
+    background-color: ${C.COLOR_COMPONENT_DARK};
     border-radius: 10px;
     &::placeholder {
       opacity: 0;

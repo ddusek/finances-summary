@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {
   COLOR_DARK,
-  COLOR_TEAL_DARK,
-  COLOR_TEAL_VERY_DARK,
+  COLOR_COMPONENT_LIGHT,
+  COLOR_COMPONENT_DARK,
   FONT_SIZE_BIG,
   COLOR_LIGHT_GREY,
   COLOR_MEDIUM_GREY,
@@ -59,9 +59,9 @@ const HeaderItem = styled.th`
 `;
 
 const TableTr = styled.tr`
-  background: ${COLOR_TEAL_DARK};
+  background: ${COLOR_COMPONENT_LIGHT};
   :nth-child(even) {
-    background: ${COLOR_TEAL_VERY_DARK};
+    background: ${COLOR_COMPONENT_DARK};
   }
 `;
 

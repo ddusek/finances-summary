@@ -1,0 +1,24 @@
+name: build
+
+on: [push]
+jobs:
+  build-be:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+    - run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+  build-fe:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - name: Build FE project
+      with:
+        node-version: '16'
+    - run: cd src/frontend
+    - run: npm i
+    - run: npm run build
+
+  

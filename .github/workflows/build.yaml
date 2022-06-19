@@ -2,23 +2,21 @@ name: build
 
 on: [push]
 jobs:
-  build-be:
-    runs-on: ubuntu-latest
+  # build-be:
+  #   runs-on: ubuntu-latest
     
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-    - run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - run: docker-compose --file docker-compose-dev.yaml up --build
   build-fe:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-    - name: Build FE project
       with:
         node-version: '16'
-    - run: cd src/frontend
+      working-directory: ./src/frontend
+    - run: ls -a
     - run: npm i
     - run: npm run build
-
   

@@ -1,7 +1,7 @@
 from typing import Union
 from datetime import datetime, timedelta
 from jwt import encode, decode, DecodeError
-from finances_summary.models.authentication import JwtUserModel
+from finances_summary.models.api_models import JwtUserModel
 from finances_summary.settings import (JWT_ALGORITHM, JWT_PRIVATE_KEY_PATH,
                                        JWT_PUBLIC_KEY_PATH)
 

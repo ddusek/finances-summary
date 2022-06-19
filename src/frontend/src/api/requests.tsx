@@ -6,9 +6,9 @@ import {
   UserLoginResponse,
   UserVerifyResponse,
   AddTransactionBody,
-  GetTransactionsResponse,
 } from './interfaces';
 import { AxiosResponse } from 'axios';
+import { Transaction } from '../interfaces';
 
 export const UserRegister = async (
   data: UserRegisterBody
@@ -46,8 +46,8 @@ export const AddTransactionReq = async (
 
 export const GetTransactions = async (
   queryString: string
-): Promise<AxiosResponse<GetTransactionsResponse>> => {
-  const response = api.get<GetTransactionsResponse>(
+): Promise<AxiosResponse<Transaction[]>> => {
+  const response = api.get<Transaction[]>(
     `/transaction/list${queryString}`
   );
   return response;

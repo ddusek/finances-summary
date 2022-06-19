@@ -1,12 +1,6 @@
+from finances_summary.models.enums import CommodityType
 from enum import Enum
 from mongoengine import Document, StringField
-
-
-class CommodityType(Enum):
-    """Type of record.
-    """
-    STOCK = 1
-    CRYPTO = 2
 
 
 class Commodities(Document):

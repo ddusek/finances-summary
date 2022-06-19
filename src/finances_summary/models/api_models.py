@@ -1,5 +1,7 @@
+from decimal import Decimal
 from dataclasses import dataclass
 from finances_summary.models.base import BaseResponse
+from finances_summary.models.enums import TransactionType
 
 
 @dataclass
@@ -36,3 +38,13 @@ class AuthorizedResponse(BaseResponse):
     """Response on authorized request.
     """
     authorized: bool = False
+
+
+@dataclass
+class Transaction():
+    date: str
+    record_type: TransactionType
+    symbol: str
+    amount: Decimal
+    price_per_unit: Decimal
+    fee: Decimal

@@ -21,12 +21,12 @@ export interface Transaction {
   record_type: 'BUY' | 'SELL';
   symbol: string;
   amount: number;
-  fee?: number;
+  fee: number;
   price_per_unit: number;
   change_number_today: number;
   change_percent_today: number;
-  change_number_sale: number;
-  change_percent_sale: number;
+  change_number_all_time: number;
+  change_percent_all_time: number;
 }
 
 export interface JwtPayload {

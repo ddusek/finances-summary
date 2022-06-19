@@ -1,13 +1,6 @@
-from enum import Enum
+from finances_summary.models.enums import TransactionType
 from mongoengine import (Document, EmbeddedDocument, EmbeddedDocumentListField,
                          StringField, DateTimeField, ObjectIdField, DecimalField)
-
-
-class TransactionType(Enum):
-    """Type of record.
-    """
-    BUY = 1
-    SELL = 2
 
 
 class Transaction(EmbeddedDocument):

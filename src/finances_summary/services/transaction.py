@@ -1,15 +1,17 @@
+import json
 from decimal import Decimal
 from bson import ObjectId
 from mongoengine.errors import OperationError, ValidationError
-from starlette.responses import Response, JSONResponse
+from starlette.responses import Response
 from starlette.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST,
                               HTTP_404_NOT_FOUND, HTTP_422_UNPROCESSABLE_ENTITY,
                               HTTP_500_INTERNAL_SERVER_ERROR)
 from finances_summary.logger import LOGGER
-from finances_summary.converters import convert_date
+from finances_summary.converters import convert_date, convert_unix_time, serialize_json
 from finances_summary.models.mongo.user_transactions import (
     TransactionType, UserTransactions, Transaction)
-from finances_summary.models.authentication import JwtUserModel
+from finances_summary.models.api_models import (JwtUserModel, Transaction as
+                                                TransactionResponse)
 from finances_summary.services.user import user_objectId
 
 
@@ -59,9 +61,7 @@ def remove(_id: ObjectId) -> Response:
 def list_(user: JwtUserModel, type_: str = None, symbol: str = None) -> Response:
     """Get list of user's transactions.
     """
-    # TODO check if query can be built with multiple calls
-    # of 'objects()' without multiple db calls.
-    # TODO add userID from jwt token to query.
+    # TODO filter by transaction type and symbols
     query = {}
     if type_ is not None:
         try:
@@ -75,5 +75,16 @@ def list_(user: JwtUserModel, type_: str = None, symbol: str = None) -> Response
     if user is not None:
         query['user'] = ObjectId(user.user_id)
     # TODO pagination.
-    transactions = UserTransactions.objects(**query)[:50].to_json()
-    return JSONResponse(transactions)
+    user_transactions = UserTransactions.objects(**query).first()
+    transactions = json.loads(user_transactions.to_json())
+    print(transactions)
+    transactions_response = [
+        TransactionResponse(date=convert_unix_time(t['date']),
+                            record_type=t['record_type'],
+                            symbol=t['symbol'],
+                            amount=t['amount'],
+                            price_per_unit=t['price_per_unit'],
+                            fee=t['fee']) for t in transactions['transactions']
+    ]
+    print(transactions_response)
+    return Response(serialize_json(transactions_response))

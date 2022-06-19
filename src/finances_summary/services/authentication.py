@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse, Response
 from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_422_UNPROCESSABLE_ENTITY,
                               HTTP_409_CONFLICT)
 from finances_summary.logger import LOGGER
-from finances_summary.models.authentication import (
+from finances_summary.models.api_models import (
     JwtUserModel, RegistrationConflict, RegistrationResponse, AuthorizedResponse)
 from finances_summary.models.mongo.users import Users
 from finances_summary.settings import (JWT_ALGORITHM, JWT_PUBLIC_KEY_PATH)

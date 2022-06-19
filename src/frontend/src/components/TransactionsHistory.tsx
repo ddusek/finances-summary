@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   COLOR_DARK,
@@ -87,94 +87,17 @@ const Item = styled.td`
   }
 `;
 
-const call = async () => {
-  const someting = await GetTransactions('?type=buy&symbol=btc');
-  console.log(someting)
-  return someting;
-}
-
 const TransactionsHistory = () => {
-  call();
-  const transactions: Transaction[] = [
-    {
-      date: new Date(),
-      record_type: 'BUY',
-      symbol: 'BTC',
-      amount: 0.25,
-      price_per_unit: 50000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: 55.222,
-      change_percent_sale: 11.222,
-    },
-    {
-      date: new Date(),
-      record_type: 'BUY',
-      symbol: 'BTC',
-      amount: 0.25,
-      price_per_unit: 40000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: 1214.665,
-      change_percent_sale: 325.222,
-    },
-    {
-      date: new Date(),
-      record_type: 'BUY',
-      symbol: 'BTC',
-      amount: 0.25,
-      price_per_unit: 34000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: 0,
-      change_percent_sale: 0,
-    },
-    {
-      date: new Date(),
-      record_type: 'SELL',
-      symbol: 'BTC',
-      amount: 0.25,
-      price_per_unit: 59923,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: -69.33,
-      change_percent_sale: -5.222,
-    },
-    {
-      date: new Date(),
-      record_type: 'BUY',
-      symbol: 'BTC',
-      amount: 0.25,
-      price_per_unit: 50000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: -112.22,
-      change_percent_sale: -11.222,
-    },
-    {
-      date: new Date(),
-      record_type: 'BUY',
-      symbol: 'BTC',
-      amount: 0.001235,
-      price_per_unit: 50000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: 0,
-      change_percent_sale: 0,
-    },
-    {
-      date: new Date(),
-      record_type: 'SELL',
-      symbol: 'BTC',
-      amount: 0.0000025,
-      price_per_unit: 50000,
-      change_number_today: 77.345,
-      change_percent_today: 22.342,
-      change_number_sale: 113.25,
-      change_percent_sale: 91.222,
-    },
-  ];
-  const len = transactions.length;
+  const [transactions, setTransactions] = useState<Transaction[] | undefined>();
+
+  useEffect(() => {
+    const getTransactionsData = async () => {
+      const response = await GetTransactions('?type=buy&symbol=btc');
+      const data = response.data;
+      setTransactions(data);
+    };
+    getTransactionsData();
+  }, []);
 
   const getRecordTypeClass = (recordType: Transaction['record_type']) => {
     switch (recordType) {
@@ -202,7 +125,10 @@ const TransactionsHistory = () => {
     return `${sign}${change}${unit}`;
   }
 
-  return (
+  return !transactions ? (
+    <Container></Container>
+  ) :
+  (
     <Container>
       <Table>
         <thead>
@@ -222,7 +148,7 @@ const TransactionsHistory = () => {
           {transactions.map((t, i) => {
             return (
               <TableTr key={i}>
-                <Item>{t.date.toLocaleDateString()}</Item>
+                <Item>{t.date}</Item>
                 <Item className={getRecordTypeClass(t.record_type)}>
                   {t.record_type}
                 </Item>
@@ -235,11 +161,11 @@ const TransactionsHistory = () => {
                 <Item className={determineChangeColor(t.change_percent_today)}>
                   {formatChange(t.change_percent_today, 'PERCENT')}
                 </Item>
-                <Item className={determineChangeColor(t.change_number_sale)}>
-                  {formatChange(t.change_number_sale, 'NUMBER')}
+                <Item className={determineChangeColor(t.change_number_all_time)}>
+                  {formatChange(t.change_number_all_time, 'NUMBER')}
                 </Item>
-                <Item className={determineChangeColor(t.change_percent_sale)}>
-                  {formatChange(t.change_percent_sale, 'PERCENT')}
+                <Item className={determineChangeColor(t.change_percent_all_time)}>
+                  {formatChange(t.change_percent_all_time, 'PERCENT')}
                 </Item>
               </TableTr>
             );

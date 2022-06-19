@@ -39,13 +39,3 @@ export interface AddTransactionBody {
   fee?: number;
   price_per_unit: number;
 }
-
-export interface GetTransactionsResponse {
-  user: string;
-  date: string;
-  record_type: 'BUY' | 'SELL';
-  symbol: string;
-  amount: number;
-  price_per_unit: number;
-  fee: number;
-}

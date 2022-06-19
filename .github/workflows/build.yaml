@@ -14,7 +14,7 @@ jobs:
       run: pip install --requirement ./src/finances_summary/requirements.txt
     - name: run api
       run: |
-        export PYTHONPATH=${GITHUB_WORKSPACE}/src/"
+        export PYTHONPATH=${GITHUB_WORKSPACE}/src/
         cd src
         python ./finances_summary/app.py
   # build-fe:

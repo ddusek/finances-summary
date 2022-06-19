@@ -2,21 +2,27 @@ name: build
 
 on: [push]
 jobs:
-  # build-be:
-  #   runs-on: ubuntu-latest
-    
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - run: docker-compose --file docker-compose-dev.yaml up --build
-  build-fe:
+  build-be:
     runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-python@v4
+    - name: run api
       with:
-        node-version: '16'
-      working-directory: ./src/frontend
-    - run: ls -a
-    - run: npm i
-    - run: npm run build
+        python-version: '3.10'
+      run: python /src/finances_summary/app.py
+  # build-fe:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - uses: actions/setup-node@v3
+  #     with:
+  #       node-version: '16'
+  #   - name: install packages
+  #     run: npm i
+  #     working-directory: ./src/frontend
+  #   - name: run build
+  #     run: npm run build
+  #     working-directory: ./src/frontend
   

@@ -8,10 +8,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
-    - name: run api
       with:
         python-version: '3.10'
-      run: python /src/finances_summary/app.py
+    - name: pip install
+      run: pip install --requirement ./src/finances_summary/requirements.txt
+    - name: run api
+      run: python ./src/finances_summary/app.py
   # build-fe:
   #   runs-on: ubuntu-latest
   #   steps:

@@ -10,21 +10,21 @@ jobs:
       uses: SpicyPizza/create-envfile@v1.3
       with:
         # MONGO
-        MONGO_HOST: 0.0.0.0
-        MONGO_HOSTNAME: fs-mongo
-        MONGO_DATABASE: finances_summary
-        MONGO_USERNAME: fs-admin
-        MONGO_PASSWORD: 123456
+        envkey_MONGO_HOST: 0.0.0.0
+        envkey_MONGO_HOSTNAME: fs-mongo
+        envkey_MONGO_DATABASE: finances_summary
+        envkey_MONGO_USERNAME: fs-admin
+        envkey_MONGO_PASSWORD: 123456
         # STARLETTE
-        ALLOWED_ORIGINS: https://0.0.0.0:3000
-        SESSION_MIDDLEWARE_SECRET: vWZvTiSGc2EkQqsdgeuaTHLa9Eu4s237J9MoLJ39nU2CSacajudrCNjRboSjcqjs
-        STARLETTE_HOST: 0.0.0.0
-        STARLETTE_PORT: 8000
-        STARLETTE_RELOAD: true
-        STARLETTE_SSL_KEYFILE: /finances_summary/secrets/0.0.0.0+2-key.pem
-        STARLETTE_SSL_CERTFILE: /finances_summary/secrets/0.0.0.0+2.pem
+        envkey_ALLOWED_ORIGINS: https://0.0.0.0:3000
+        envkey_SESSION_MIDDLEWARE_SECRET: vWZvTiSGc2EkQqsdgeuaTHLa9Eu4s237J9MoLJ39nU2CSacajudrCNjRboSjcqjs
+        envkey_STARLETTE_HOST: 0.0.0.0
+        envkey_STARLETTE_PORT: 8000
+        envkey_STARLETTE_RELOAD: true
+        envkey_STARLETTE_SSL_KEYFILE: /finances_summary/secrets/0.0.0.0+2-key.pem
+        envkey_STARLETTE_SSL_CERTFILE: /finances_summary/secrets/0.0.0.0+2.pem
         # API
-        API_KEY_POLYGON: pNcuEhFrrTZESeXzsoMFQE1AwVuVk5S2
+        envkey_API_KEY_POLYGON: pNcuEhFrrTZESeXzsoMFQE1AwVuVk5S2
         # directory: ./
         file_name: .env
         fail_on_empty: true

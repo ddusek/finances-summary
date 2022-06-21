@@ -25,9 +25,10 @@ jobs:
         envkey_STARLETTE_SSL_CERTFILE: /finances_summary/secrets/0.0.0.0+2.pem
         # API
         envkey_API_KEY_POLYGON: pNcuEhFrrTZESeXzsoMFQE1AwVuVk5S2
-        directory: ./../../
+        directory: ./
         file_name: .env
         fail_on_empty: true
+    - run: ls -a
 
     - uses: actions/checkout@v2
     # - uses: actions/setup-python@v4

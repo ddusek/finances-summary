@@ -1,30 +1,27 @@
-name: build
+name: build-dev
 
 on: [push]
 jobs:
   build-be:
     runs-on: ubuntu-latest
-    
+    environment: dev
     steps:
     - name: Make envfile
-      env:
-        # MONGO
-        MONGO_HOST: ${{secrets.MONGO_HOST}}
-        MONGO_HOSTNAME: ${{secrets.MONGO_HOSTNAME}}
-        MONGO_DATABASE: ${{secrets.MONGO_DATABASE}}
-        MONGO_USERNAME: ${{secrets.MONGO_USERNAME}}
-        MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
-        # STARLETTE
-        ALLOWED_ORIGINS: ${{secrets.ALLOWED_ORIGINS}}
-        SESSION_MIDDLEWARE_SECRET: ${{secrets.SESSION_MIDDLEWARE_SECRET}}
-        STARLETTE_HOST: ${{secrets.STARLETTE_HOST}}
-        STARLETTE_PORT: ${{secrets.STARLETTE_PORT}}
-        STARLETTE_RELOAD: ${{secrets.STARLETTE_RELOAD}}
-        STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}}
-        STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}}
-        # API
-        API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}}
-
+       run: |
+        touch .env
+        MONGO_HOST: ${{secrets.MONGO_HOST}} >> .env
+        MONGO_HOSTNAME: ${{secrets.MONGO_HOSTNAME}} >> .env
+        MONGO_DATABASE: ${{secrets.MONGO_DATABASE}} >> .env
+        MONGO_USERNAME: ${{secrets.MONGO_USERNAME}} >> .env
+        MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}} >> .env
+        ALLOWED_ORIGINS: ${{secrets.ALLOWED_ORIGINS}} >> .env
+        SESSION_MIDDLEWARE_SECRET: ${{secrets.SESSION_MIDDLEWARE_SECRET}} >> .env
+        STARLETTE_HOST: ${{secrets.STARLETTE_HOST}} >> .env
+        STARLETTE_PORT: ${{secrets.STARLETTE_PORT}} >> .env
+        STARLETTE_RELOAD: ${{secrets.STARLETTE_RELOAD}} >> .env
+        STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
+        STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
+        API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
     - uses: actions/checkout@v2
     # - uses: actions/setup-python@v4
     #   with:

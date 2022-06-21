@@ -6,17 +6,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: pip install
-      run: pip install --requirement ./src/finances_summary/requirements.txt
-    - name: run api
-      run: |
-        export PYTHONPATH=${GITHUB_WORKSPACE}/src/
-        cd src
-        python ./finances_summary/app.py
+    - uses: actions/checkout@v2
+    # - uses: actions/setup-python@v4
+    #   with:
+    #     python-version: '3.10'
+    # - name: pip install
+    #   run: pip install --requirement ./src/finances_summary/requirements.txt
+    # - name: run api
+    #   run: |
+    #     export PYTHONPATH=${GITHUB_WORKSPACE}/src/
+    #     cd src
+    #     python ./finances_summary/app.py
+    - name: Run docker app
+      run: docker-compose --file docker-compose-dev.yaml up --build
   # build-fe:
   #   runs-on: ubuntu-latest
   #   steps:

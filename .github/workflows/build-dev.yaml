@@ -8,20 +8,20 @@ jobs:
     steps:
     - name: Make envfile
       run: |
-      touch .env
-      MONGO_HOST: ${{secrets.MONGO_HOST}} >> .env
-      MONGO_HOSTNAME: ${{secrets.MONGO_HOSTNAME}} >> .env
-      MONGO_DATABASE: ${{secrets.MONGO_DATABASE}} >> .env
-      MONGO_USERNAME: ${{secrets.MONGO_USERNAME}} >> .env
-      MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}} >> .env
-      ALLOWED_ORIGINS: ${{secrets.ALLOWED_ORIGINS}} >> .env
-      SESSION_MIDDLEWARE_SECRET: ${{secrets.SESSION_MIDDLEWARE_SECRET}} >> .env
-      STARLETTE_HOST: ${{secrets.STARLETTE_HOST}} >> .env
-      STARLETTE_PORT: ${{secrets.STARLETTE_PORT}} >> .env
-      STARLETTE_RELOAD: ${{secrets.STARLETTE_RELOAD}} >> .env
-      STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
-      STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
-      API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
+        touch .env
+        MONGO_HOST: ${{secrets.MONGO_HOST}} >> .env
+        MONGO_HOSTNAME: ${{secrets.MONGO_HOSTNAME}} >> .env
+        MONGO_DATABASE: ${{secrets.MONGO_DATABASE}} >> .env
+        MONGO_USERNAME: ${{secrets.MONGO_USERNAME}} >> .env
+        MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}} >> .env
+        ALLOWED_ORIGINS: ${{secrets.ALLOWED_ORIGINS}} >> .env
+        SESSION_MIDDLEWARE_SECRET: ${{secrets.SESSION_MIDDLEWARE_SECRET}} >> .env
+        STARLETTE_HOST: ${{secrets.STARLETTE_HOST}} >> .env
+        STARLETTE_PORT: ${{secrets.STARLETTE_PORT}} >> .env
+        STARLETTE_RELOAD: ${{secrets.STARLETTE_RELOAD}} >> .env
+        STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
+        STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
+        API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
     - uses: actions/checkout@v2
     # - uses: actions/setup-python@v4
     #   with:

@@ -22,7 +22,10 @@ jobs:
         echo STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
         echo STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
         echo API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
-        echo "ls -a"
+        echo ls -a
+        ls -a
+    - name: test ls
+      run: ls -a
     - uses: actions/checkout@v2
     # - uses: actions/setup-python@v4
     #   with:

@@ -39,8 +39,6 @@ jobs:
         touch 0.0.0.0+2.pem
         echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+2.pem
         echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+2-key.pem
-        cat 0.0.0.0+2.pem
-        cat 0.0.0.0+2-key.pem
     - name: Create ssl certificate files for backend
       run: |
         cd src/finances_summary/
@@ -55,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
+    - uses: actions/checkout@v2
     - name: Run docker app
       run: docker-compose --file docker-compose-dev.yaml up --build
 

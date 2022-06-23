@@ -8,7 +8,6 @@ jobs:
     steps:
     - name: Make envfile
       run: |
-        cd ..
         touch .env
         echo MONGO_HOST: ${{secrets.MONGO_HOST}} >> .env
         echo MONGO_HOSTNAME: ${{secrets.MONGO_HOSTNAME}} >> .env
@@ -23,9 +22,9 @@ jobs:
         echo STARLETTE_SSL_KEYFILE: ${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
         echo STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
         echo API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
-        echo ls -a
         ls -a
         pwd
+        cat .env
     - uses: actions/checkout@v2
     # - uses: actions/setup-python@v4
     #   with:

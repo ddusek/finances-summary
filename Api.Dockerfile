@@ -10,7 +10,7 @@ RUN mkdir /finances_summary
 
 COPY scripts/api-entrypoint-dev.sh /scripts/api-entrypoint-dev.sh
 COPY src/finances_summary/ /finances_summary/
-# COPY /.env /.env
+COPY /.env /.env
 ENV PYTHONPATH=./
 
 RUN pip install --upgrade pip && \

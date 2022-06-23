@@ -23,6 +23,8 @@ jobs:
         echo STARLETTE_SSL_CERTFILE: ${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
         echo API_KEY_POLYGON: ${{secrets.API_KEY_POLYGON}} >> .env
         ls -a
+        ls ../ -a
+        ls ../.. -a
         pwd
         cat .env
     - uses: actions/checkout@v2

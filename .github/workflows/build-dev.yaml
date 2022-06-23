@@ -25,6 +25,9 @@ jobs:
         ls -a
         ls ../ -a
         ls ../.. -a
+        ls ../../.. -a
+        ls ../../../.. -a
+        ls ../../../../.. -a
         pwd
         cat .env
     - uses: actions/checkout@v2

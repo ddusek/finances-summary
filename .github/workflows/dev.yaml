@@ -49,8 +49,12 @@ jobs:
         cd secrets
         touch 0.0.0.0+2-key.pem
         touch 0.0.0.0+2.pem
+        touch private-jwt.pem
+        touch public-jwt.pem
         echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+2.pem
         echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+2-key.pem
+        echo "${{secrets.PRIVATE_JWT}}" > private-jwt.pem
+        echo "${{secrets.PUBLIC_JWT}}" > public-jwt.pem
 
     - name: Run docker app
       run: docker-compose --file docker-compose-dev.yaml up --build --detach

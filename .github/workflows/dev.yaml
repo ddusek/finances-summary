@@ -57,6 +57,6 @@ jobs:
 
     - uses: actions/setup-python@v3
     - name: Install pytest
-      run: pip install pytest==7.1.2
+      run: pip install --no-cache-dir --requirement /src/finances_summary/requirements.txt
     - name: Run python tests
       run: pytest src/finances_summary/tests/

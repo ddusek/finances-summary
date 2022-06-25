@@ -4,6 +4,7 @@ pylama
 mypy
 rope
 
+pytest==7.1.2
 cryptography==37.0.2
 pymongo==4.1.1
 mongoengine==0.24.1

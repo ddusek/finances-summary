@@ -1,0 +1,67 @@
+name: dev
+
+on: [push]
+jobs:
+  run_and_test:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create .env file for backend
+      run: |
+        touch .env
+        echo MONGO_HOST=${{secrets.MONGO_HOST}} >> .env
+        echo MONGO_HOSTNAME=${{secrets.MONGO_HOSTNAME}} >> .env
+        echo MONGO_DATABASE=${{secrets.MONGO_DATABASE}} >> .env
+        echo MONGO_USERNAME=${{secrets.MONGO_USERNAME}} >> .env
+        echo MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} >> .env
+        echo ALLOWED_ORIGINS=${{secrets.ALLOWED_ORIGINS}} >> .env
+        echo SESSION_MIDDLEWARE_SECRET=${{secrets.SESSION_MIDDLEWARE_SECRET}} >> .env
+        echo STARLETTE_HOST=${{secrets.STARLETTE_HOST}} >> .env
+        echo STARLETTE_PORT=${{secrets.STARLETTE_PORT}} >> .env
+        echo STARLETTE_RELOAD=${{secrets.STARLETTE_RELOAD}} >> .env
+        echo STARLETTE_SSL_KEYFILE=${{secrets.STARLETTE_SSL_KEYFILE}} >> .env
+        echo STARLETTE_SSL_CERTFILE=${{secrets.STARLETTE_SSL_CERTFILE}} >> .env
+        echo API_KEY_POLYGON=${{secrets.API_KEY_POLYGON}} >> .env
+
+    - name: Create .env file for frontend
+      run: |
+        cd src/frontend/
+        touch .env
+        echo HTTPS=${{secrets.HTTPS}} >> .env
+        echo SSL_CRT_FILE=${{secrets.SSL_CRT_FILE_FE}} >> .env
+        echo SSL_KEY_FILE=${{secrets.SSL_KEY_FILE_FE}} >> .env
+
+    - name: Create ssl certificate files for frontend
+      run: |
+        cd src/frontend/
+        mkdir secrets
+        cd secrets
+        touch 0.0.0.0-key.pem
+        touch 0.0.0.0.pem
+        echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0.pem
+        echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0-key.pem
+
+    - name: Create ssl certificate files for backend
+      run: |
+        cd src/finances_summary/
+        mkdir secrets
+        cd secrets
+        touch 0.0.0.0+2-key.pem
+        touch 0.0.0.0+2.pem
+        touch private-jwt.pem
+        touch public-jwt.pem
+        echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+2.pem
+        echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+2-key.pem
+        echo "${{secrets.PRIVATE_JWT}}" > private-jwt.pem
+        echo "${{secrets.PUBLIC_JWT}}" > public-jwt.pem
+
+    - name: Run docker app
+      run: docker-compose --file docker-compose-dev.yaml up --build --detach
+
+    - uses: actions/setup-python@v3
+    - name: Install pytest
+      run: pip install --no-cache-dir --requirement src/finances_summary/requirements.txt
+
+    - name: Run python tests
+      run: pytest src/finances_summary/tests/

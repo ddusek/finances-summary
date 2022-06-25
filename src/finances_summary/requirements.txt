@@ -4,13 +4,13 @@ pylama
 mypy
 rope
 
-pytest
-cryptography
-pymongo
-mongoengine
-starlette
-uvicorn
-itsdangerous
-pyjwt
-argon2-cffi
-yfinance
+pytest==7.1.2
+cryptography==37.0.2
+pymongo==4.1.1
+mongoengine==0.24.1
+starlette==0.20.1
+uvicorn==0.17.6
+itsdangerous==2.1.2
+pyjwt==2.4.0
+argon2-cffi==21.3.0
+yfinance==0.1.70

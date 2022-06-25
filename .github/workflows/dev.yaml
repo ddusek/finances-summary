@@ -2,7 +2,7 @@ name: dev
 
 on: [push]
 jobs:
-  create_env:
+  run_and_test:
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -56,5 +56,7 @@ jobs:
       run: docker-compose --file docker-compose-dev.yaml up --build --detach
 
     - uses: actions/setup-python@v3
+    - name: Install pytest
+      run: pip install pytest==7.1.2
     - name: Run python tests
       run: pytest src/finances_summary/tests/

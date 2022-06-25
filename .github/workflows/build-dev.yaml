@@ -35,10 +35,10 @@ jobs:
         cd src/frontend/
         mkdir secrets
         cd secrets
-        touch 0.0.0.0+2-key.pem
-        touch 0.0.0.0+2.pem
-        echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+2.pem
-        echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+2-key.pem
+        touch 0.0.0.0+0-key.pem
+        touch 0.0.0.0+0.pem
+        echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+0.pem
+        echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+0-key.pem
     - name: Create ssl certificate files for backend
       run: |
         cd src/finances_summary/

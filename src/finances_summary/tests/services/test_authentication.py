@@ -1,12 +1,12 @@
 import pytest
-from starlette.status import (HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT,
+from starlette.status import (HTTP_200_OK, HTTP_401_UNAUTHORIZED,
                               HTTP_422_UNPROCESSABLE_ENTITY)
 from mongoengine import connect, Q
-from finances_summary.services.api_models import register, login as login_user
+from finances_summary.services.authentication import register, login as login_user
 from finances_summary.models.mongo.users import Users
-from finances_summary.settings import MONGO_CONN_URI
+from finances_summary.settings import MONGO_CONN_URI_WITH_HOST
 
-connect(host=MONGO_CONN_URI)
+connect(host=MONGO_CONN_URI_WITH_HOST)
 
 
 @pytest.mark.parametrize('username,password,email',

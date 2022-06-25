@@ -48,36 +48,12 @@ jobs:
         touch 0.0.0.0+2.pem
         echo "${{secrets.SSL_CERT_FILE}}" > 0.0.0.0+2.pem
         echo "${{secrets.SSL_KEY_FILE}}" > 0.0.0.0+2-key.pem
-    - name: Run docker app
-      run: docker-compose --file docker-compose-dev.yaml up --build
-  # run_docker_app:
-  #   needs: create_env
-  #   runs-on: ubuntu-latest
-  #   environment: dev
-  #   steps:
-  #   - uses: actions/checkout@v2
 
-
-  # build-fe:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/setup-node@v3
-  #     with:
-  #       node-version: '16'
-  #   - name: install packages
-  #     run: npm i
-  #     working-directory: ./src/frontend
-  #   - name: run build
-  #     run: npm run build
-  #     working-directory: ./src/frontend
-    # - uses: actions/setup-python@v4
-  #   with:
-  #     python-version: '3.10'
-  # - name: pip install
-  #   run: pip install --requirement ./src/finances_summary/requirements.txt
-  # - name: run api
-  #   run: |
-  #     export PYTHONPATH=${GITHUB_WORKSPACE}/src/
-  #     cd src
-  #     python ./finances_summary/app.py
+  run_docker_app:
+  runs-on: ubuntu-latest
+  environment: dev
+  needs: create_env
+  steps:
+  - uses: actions/checkout@v2
+  - name: Run docker app
+    run: docker-compose --file docker-compose-dev.yaml up --build

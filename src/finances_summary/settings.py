@@ -14,10 +14,19 @@ MONGO_DATABASE = config('MONGO_DATABASE')
 MONGO_USERNAME = config('MONGO_USERNAME', cast=Secret)
 MONGO_PASSWORD = config('MONGO_PASSWORD', cast=Secret)
 
+# Connect with hostname - used for connections from Docker.
 MONGO_CONN_URI = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
     urllib.parse.quote_plus(str(MONGO_USERNAME)),
     urllib.parse.quote_plus(str(MONGO_PASSWORD)),
     MONGO_HOSTNAME,
+    MONGO_DATABASE
+)
+
+# Connect with host (IP address) - used for connections outside of Docker.
+MONGO_CONN_URI_WITH_HOST = 'mongodb://%s:%s@%s/%s?authSource=admin' % (
+    urllib.parse.quote_plus(str(MONGO_USERNAME)),
+    urllib.parse.quote_plus(str(MONGO_PASSWORD)),
+    MONGO_HOST,
     MONGO_DATABASE
 )
 
